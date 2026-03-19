@@ -10,7 +10,7 @@ add_executable(inverted_pendulum
   src/physics.cpp
 )
 
-targe_include_directories(inverted_pendulum PRIVATE
+target_include_directories(inverted_pendulum PRIVATE
   include
   /usr/include/eigen3
 )
