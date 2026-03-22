@@ -124,9 +124,7 @@ mg\sin\theta \end{bmatrix}$$
 
 $$\boxed{\ddot x = \frac{F + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta}{M + m\sin^2\theta}}~\boxed{\ddot\theta = \frac{(M+m)g\sin\theta - \cos\theta(F + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
 
-Now we can linearize the dynamic equations using a first order Taylor Series approximation: 
-
-{$\sin\theta = \theta$, $\cos\theta = 1$, $\dot\theta^2\sin\theta = 0$}
+Now we can linearize the dynamic equations using a first order Taylor Series approximation: $\sin\theta = \theta,\cos\theta = 1, \dot\theta^2\sin\theta = 0$
 
 $$\boxed{(M+m)\ddot x + mL\ddot\theta = F}$$
 
