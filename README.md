@@ -86,7 +86,7 @@ $$\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0$$
 
 *Here is a set of Nonlinear coupled ODEs $\ddot x ,\ddot\theta$ are in both equations*
 
-**Explicit solution to $\ddot x$ and $\ddot\theta$:**
+Explicit solution to $\ddot x$ and $\ddot\theta$.
 
 $$ \begin{bmatrix}(M+m) & mL\cos\theta \\ m\cos\theta & mL \end{bmatrix} \begin{bmatrix} \ddot x \\ \ddot\theta \end{bmatrix} = \begin{bmatrix} F + mL\dot\theta^2\sin\theta \\ mg\sin\theta \end{bmatrix} $$
 
