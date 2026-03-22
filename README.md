@@ -97,10 +97,10 @@ mg\sin\theta \end{bmatrix}$$
 
 To solve this explicitly we need to perform a matrix inversion on A which will involve solving its determinant $Ay=b$ and  $y=A^{-1}b$.
 
-Let us say 
+Let us say:
+
 $$M = \begin{bmatrix} (M+m) & mL\cos\theta\\
-m\cos\theta & mL \end{bmatrix}
-$$
+m\cos\theta & mL \end{bmatrix}$$
 
 The $det(M)$ would equal to the following:
 
