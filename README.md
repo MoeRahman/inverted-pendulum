@@ -97,13 +97,21 @@ mg\sin\theta \end{bmatrix}$$
 
 To solve this explicitly we need to perform a matrix inversion on A which will involve solving its determinant $Ay=b$ and  $y=A^{-1}b$.
 
-Let us say $M = \begin{bmatrix} (M+m) & mL\cos\theta\\ m\cos\theta & mL \end{bmatrix}$, then the $det(M)$ would equal to the following:
+Let us say 
+$$M = \begin{bmatrix} (M+m) & mL\cos\theta\\
+m\cos\theta & mL \end{bmatrix}
+$$
+
+The $det(M)$ would equal to the following:
 
 $$det(M) = mL(M+m) -m^2L\cos^2\theta$$
 
 $$det(M) = mL(M+m\sin^2\theta)$$
 
-$$M^{-1} = \frac{1}{det(M)} \begin{bmatrix} mL & -mL\cos\theta\\ -m\cos\theta & (M+m) \end{bmatrix}$$
+$$M^{-1} = \frac{1}{det(M)} 
+\begin{bmatrix} mL & -mL\cos\theta\\ 
+-m\cos\theta & (M+m) 
+\end{bmatrix}$$
 
 Thus the explicit solution for $\ddot x$ and $\ddot\theta$:
 
