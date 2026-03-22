@@ -176,4 +176,12 @@ $$
 
 Here $u(t)$ is the input force applied to drive the cart's position. A few key important details were left out in this model derivation such as the moment of inertio of the cart and the pole, the coefficient of friction of the joint which will dampen the pole's motion, also we don't have a model for what is providing the input force $u(t)$ or how this force is being driven. 
 
-If we drive the system with a DC motor we need to include the model dynamics for a DC motor into the system. Additionally, we are under the assumption that we are dealing with a full-state feedback system $y = \begin{bmatrix}1&0&0&0\\ 0&1&0&0\\ 0&0&1&0\\ 0&0&0&1\end{bmatrix}x$ in other words, all state variables are observable with no noise, *not always the case*.
+If we drive the system with a DC motor we need to include the model dynamics for a DC motor into the system. Additionally, we are under the assumption that we are dealing with a full-state feedback system: 
+
+$$y = \begin{bmatrix} 
+1&0&0&0\\
+0&1&0&0\\
+0&0&1&0\\ 
+0&0&0&1\end{bmatrix}x$$ 
+
+In other words, all state variables are observable with no noise, *not always the case*.
