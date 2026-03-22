@@ -27,37 +27,64 @@ Updates on the project here.
 Phase I - Obtain the linear system model of the inverted pendulum
 
 Kinematics: Position of the Pendulum Bob $(x_b, y_b)$
+
 $x_b = x + L\sin(\theta)$
+
 $\dot x_b = \dot x + L\dot \theta \cos(\theta)$
+
 $y_b = L\cos(\theta)$
+
 $\dot y_b = -L \dot \theta \sin(\theta)$
 
 **Kinetic Energy: 2 sources of kinetic energy (Cart + Pendulum Bob)**
+
 $$T = \frac 1 2 M \dot x^2 + \frac 1 2 m(\dot x_b^2 + y_b^2)$$
+
 $$T = \frac 1 2 (M + m)\dot x^2 + mL\dot x \dot \theta \cos(\theta) + \frac 1 2 mL^2\dot \theta^2$$
+
 **Potential Energy:**  $V = mgL\cos (\theta)$
 
-**Lagrangian:** $\mathcal L = T - V$ $$\boxed{\mathcal L = \frac 1 2 (M + m)\dot x^2 + mL\dot x \dot \theta\cos(\theta) + \frac 1 2 mL^2\dot \theta^2 - mgL\cos (\theta)}$$
+**Lagrangian:** $\mathcal L = T - V$
+
+$$\boxed{\mathcal L = \frac 1 2 (M + m)\dot x^2 + mL\dot x \dot \theta\cos(\theta) + \frac 1 2 mL^2\dot \theta^2 - mgL\cos (\theta)}$$
+
 **[[Euler-Lagrange Equation]] for $q_1 = x$:**
+
 $$\frac{\partial \mathcal L}{\partial \dot x} = (M + m)\dot x + mL\dot\theta cos(\theta)$$
+
 $$\frac{d}{dt} \left( \frac{\partial \mathcal L}{\partial \dot x} \right) = (M + m)\ddot x + mL\ddot\theta cos(\theta) - mL\dot \theta^2 sin(\theta)$$
+
 $$\frac {\partial \mathcal L}{\partial x} = 0$$
+
 $$\frac{d}{dt} \left( \frac{\partial \mathcal L}{\partial \dot x}\right) - \frac{\partial \mathcal L}{\partial x} = F$$
+
 $$\boxed{\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F}$$
+
 **[[Euler-Lagrange Equation]] for $q_2 = \theta$:**
 $$\frac{\partial\mathcal L}{\partial\dot\theta} = mL\dot x\cos(\theta) + mL^2\dot\theta$$
+
 $$\frac{d}{dt}\left(\frac{\partial\mathcal L}{\partial\dot\theta}\right) = mL\ddot x\cos(\theta) - mL\dot x\dot\theta\sin(\theta) + mL^2\ddot\theta$$
+
 $$\frac {\partial \mathcal L}{\partial\theta} = mL\sin(\theta)\left(g-\dot x\dot\theta\right)$$
+
 $$\frac{d}{dt} \left( \frac{\partial\mathcal L}{\partial\dot\theta}\right) - \frac{\partial \mathcal L}{\partial\theta} = \mathcal T$$
+
 **Generalized Force $Q_\theta = \mathcal T = 0$ (no torque applied directly to pendulum):**
 $$mL\ddot x\cos(\theta) - mL\dot\theta\dot x \sin(\theta) + mL^2\ddot\theta + mL\dot\theta\dot x \sin(\theta) -mgL\sin(\theta) = 0$$
+
 $$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = 0$$
+
 $$\boxed{\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0}$$
+
 **The Nonlinear Equation of Motion:**
 $$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F$$
+
 $$\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0$$
+
 *Here is a set of Nonlinear coupled ODEs ($\ddot x$ and $\ddot\theta$ are in both equations)*
+
 **Explicit solution to $\ddot x$ and $\ddot\theta$:**
+
 $$
 \begin{bmatrix}
 (M+m) & mL\cos\theta\\
@@ -73,13 +100,19 @@ F + mL\dot\theta^2\sin\theta\\
 mg\sin\theta
 \end{bmatrix}
 $$
+
 To solve this explicitly we need to perform a matrix inversion on A which will involve solving its determinant $Ay=b$ and  $y=A^{-1}b$.
 
 Let us say $M = \begin{bmatrix} (M+m) & mL\cos\theta\\ m\cos\theta & mL \end{bmatrix}$, then the $det(M)$ would equal to the following:
+
 $$det(M) = mL(M+m) -m^2L\cos^2\theta$$
+
 $$det(M) = mL(M+m\sin^2\theta)$$
+
 $$M^{-1} = \frac{1}{det(M)} \begin{bmatrix} mL & -mL\cos\theta\\ -m\cos\theta & (M+m) \end{bmatrix}$$
+
 Thus the explicit solution for $\ddot x$ and $\ddot\theta$:
+
 $$
 \begin{bmatrix}
 \ddot x\\
@@ -92,14 +125,23 @@ F + mL\dot\theta^2\sin\theta\\
 mg\sin\theta
 \end{bmatrix}
 $$
+
 $$\boxed{\ddot x = \frac{F + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta}{M + m\sin^2\theta}}~\boxed{\ddot\theta = \frac{(M+m)g\sin\theta - \cos\theta(F + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
+
 Now we can linearize the dynamic equations using a first order Taylor Series approximation: 
+
 {$\sin\theta = \theta$, $\cos\theta = 1$, $\dot\theta^2\sin\theta = 0$}
+
 $$\boxed{(M+m)\ddot x + mL\ddot\theta = F}$$
+
 $$mL\ddot x + mL^2\ddot\theta - mgL\theta = 0$$
+
 $$\ddot x + L\ddot\theta - g\theta = 0$$
+
 $$\boxed{\ddot x = g\theta - L\ddot\theta}$$
+
 The resulting State-Space Systems:
+
 $$
 x=\begin{bmatrix}
 x\\\dot x\\\theta\\\dot\theta
@@ -113,8 +155,8 @@ A=\begin{bmatrix}
 B=\begin{bmatrix}
 0\\\frac{1}{M}\\0\\-\frac{1}{ML}
 \end{bmatrix}
-
 $$
+
 $$
 \dot x = 
 \begin{bmatrix} 
@@ -127,6 +169,7 @@ $$
 0\\\frac{1}{M}\\0\\-\frac{1}{ML}
 \end{bmatrix}u
 $$
+
 Here $u(t)$ is the input force applied to drive the cart's position. A few key important details were left out in this model derivation such as the moment of inertio of the cart and the pole, the coefficient of friction of the joint which will dampen the pole's motion, also we don't have a model for what is providing the input force $u(t)$ or how this force is being driven. 
 
 If we drive the system with a DC motor we need to include the model dynamics for a DC motor into the system. Additionally, we are under the assumption that we are dealing with a full-state feedback system $ y = \begin{bmatrix}1&0&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{bmatrix}x$ in other words, all state variables are observable with no noise, *not always the case*.
