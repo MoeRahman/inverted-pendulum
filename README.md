@@ -115,7 +115,7 @@ $$M^{-1} = \frac{1}{det(M)}
 
 Thus the explicit solution for $\ddot x$ and $\ddot\theta$:
 
-$$\begin{bmatrix} \ddot x \ddot \theta \end{bmatrix} = \frac{1}{mL(M+m\sin^2\theta)} \begin{bmatrix} mL & -mL\cos\theta -m\cos\theta & (M+m) \end{bmatrix}
+$$\begin{bmatrix} \ddot x \\ \ddot\theta \end{bmatrix} = \frac{1}{mL(M+m\sin^2\theta)} \begin{bmatrix} mL & -mL\cos\theta \\ -m\cos\theta & (M+m) \end{bmatrix}
 \begin{bmatrix} F + mL\dot\theta^2\sin\theta\\
 mg\sin\theta \end{bmatrix}$$
 
