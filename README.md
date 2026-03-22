@@ -84,7 +84,7 @@ $$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\t
 
 $$\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0$$
 
-*Here is a set of Nonlinear coupled ODEs $\ddot x ,\ddot\theta$ are in both equations*
+Here is a set of Nonlinear coupled ODEs $\ddot x ,\ddot\theta$ are in both equations
 
 Explicit solution to: $\ddot x$ and $\ddot\theta$.
 
