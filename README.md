@@ -84,28 +84,11 @@ $$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\t
 
 $$\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0$$
 
-*Here is a set of Nonlinear coupled ODEs 
-$(\ddot x$ 
-and 
-$\ddot\theta)$ are in both equations*
+*Here is a set of Nonlinear coupled ODEs $\ddot x ,\ddot\theta$ are in both equations*
 
 **Explicit solution to $\ddot x$ and $\ddot\theta$:**
 
-$$
-\begin{bmatrix}
-(M+m) & mL\cos\theta\\
-m\cos\theta & mL
-\end{bmatrix}
-\begin{bmatrix}
-\ddot x\\
-\ddot\theta
-\end{bmatrix}
-= 
-\begin{bmatrix}
-F + mL\dot\theta^2\sin\theta\\
-mg\sin\theta
-\end{bmatrix}
-$$
+$$ \begin{bmatrix}(M+m) & mL\cos\theta \\ m\cos\theta & mL \end{bmatrix} \begin{bmatrix} \ddot x \\ \ddot\theta \end{bmatrix} = \begin{bmatrix} F + mL\dot\theta^2\sin\theta \\ mg\sin\theta \end{bmatrix} $$
 
 To solve this explicitly we need to perform a matrix inversion on A which will involve solving its determinant $Ay=b$ and  $y=A^{-1}b$.
 
