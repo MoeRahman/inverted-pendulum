@@ -60,7 +60,8 @@ $$\frac{d}{dt} \left( \frac{\partial \mathcal L}{\partial \dot x}\right) - \frac
 
 $$\boxed{\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F}$$
 
-**[[Euler-Lagrange Equation]] for $q_2 = \theta$:**
+**Euler-Lagrange Equation for $q_2 = \theta$:**
+
 $$\frac{\partial\mathcal L}{\partial\dot\theta} = mL\dot x\cos(\theta) + mL^2\dot\theta$$
 
 $$\frac{d}{dt}\left(\frac{\partial\mathcal L}{\partial\dot\theta}\right) = mL\ddot x\cos(\theta) - mL\dot x\dot\theta\sin(\theta) + mL^2\ddot\theta$$
@@ -70,6 +71,7 @@ $$\frac {\partial \mathcal L}{\partial\theta} = mL\sin(\theta)\left(g-\dot x\dot
 $$\frac{d}{dt} \left( \frac{\partial\mathcal L}{\partial\dot\theta}\right) - \frac{\partial \mathcal L}{\partial\theta} = \mathcal T$$
 
 **Generalized Force $Q_\theta = \mathcal T = 0$ (no torque applied directly to pendulum):**
+
 $$mL\ddot x\cos(\theta) - mL\dot\theta\dot x \sin(\theta) + mL^2\ddot\theta + mL\dot\theta\dot x \sin(\theta) -mgL\sin(\theta) = 0$$
 
 $$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = 0$$
@@ -77,11 +79,15 @@ $$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = 0$$
 $$\boxed{\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0}$$
 
 **The Nonlinear Equation of Motion:**
+
 $$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F$$
 
 $$\ddot x\cos(\theta) + L\ddot\theta - g\sin(\theta) = 0$$
 
-*Here is a set of Nonlinear coupled ODEs ($\ddot x$ and $\ddot\theta$ are in both equations)*
+*Here is a set of Nonlinear coupled ODEs 
+$(\ddot x$ 
+and 
+$\ddot\theta)$ are in both equations*
 
 **Explicit solution to $\ddot x$ and $\ddot\theta$:**
 
