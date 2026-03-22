@@ -139,7 +139,10 @@ The resulting State-Space Systems:
 
 $$
 x=\begin{bmatrix}
-x\\\dot x\\\theta\\\dot\theta
+x\\
+\dot x\\
+\theta\\
+\dot\theta
 \end{bmatrix}~
 A=\begin{bmatrix} 
 0&1&0&0\\
@@ -148,7 +151,10 @@ A=\begin{bmatrix}
 0&0&0&\frac{(M+m)g}{ML}
 \end{bmatrix}~
 B=\begin{bmatrix}
-0\\\frac{1}{M}\\0\\-\frac{1}{ML}
+0\\
+\frac{1}{M}\\
+0\\
+-\frac{1}{ML}
 \end{bmatrix}
 $$
 
@@ -161,7 +167,10 @@ $$
 0&0&0&\frac{(M+m)g}{ML}
 \end{bmatrix}x~+~
 \begin{bmatrix}
-0\\\frac{1}{M}\\0\\-\frac{1}{ML}
+0\\
+\frac{1}{M}\\
+0\\
+-\frac{1}{ML}
 \end{bmatrix}u
 $$
 
