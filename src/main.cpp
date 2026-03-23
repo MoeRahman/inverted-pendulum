@@ -9,6 +9,7 @@ int main() {
   constexpr float M = 1.f; //cart mass
   constexpr float l = .5f; //pole length
 
+  //write data to csv file
   std::ofstream myFile("data.csv");
 
   if (!myFile.is_open()) {
@@ -19,7 +20,7 @@ int main() {
   myFile << "Time,Pos_X,Angle\n";
 
   //Simulate
-  const float duration {10.f};
+  const float duration {12.f};
   float time{0.f};
   float dt{0.001f};
 
@@ -41,7 +42,10 @@ int main() {
 
   B << 0.f, 1.f/M, 0.f, -1.f/(M*l);
 
-  K << -1.3003f,-2.3173f,-26.6124f,-5.6587f; 
+  //K << -1.3003f,-2.3173f,-26.6124f,-5.6587f;
+  //K << -874.92f,-307.24f,-843.75f,-176.62f;
+  //K << -12.237f,-20.598f,-110.906f,-22.799f;
+  //K << -0.1225,-0.3952,-15.5213,-2.6976;
 
   while(time < duration){
     
