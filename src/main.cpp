@@ -46,29 +46,35 @@ int main() {
        0, 0, -m*g/M, 0, 
        0, 0, 0, 1, 
        0, 0, (M + m)*g/(M*l), 0;
-  x << 0, 0, 0.05, 0;
-  x_dot << 0, 0, 0, 0;
+
+  x << 0, 0, -0.2, 0;
   B << 0, 1/M, 0, -1/(M*l);
 
-  //K << -1.3003,-2.3173,-26.6124,-5.6587;
-  //K << -874.92,-307.24,-843.75,-176.62;
+  //GENTLE CONTROLS
+  K << -1.3003,-2.3173,-26.6124,-5.6587;
+  //AGRESSIVE CONTROLS
+  //K <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
+  //K << -9.3780,  -11.5089,  -64.0490,  -14.2545;
+  //K << -22.166,  -21.390,  -92.643,  -20.695;
   //K << -12.237f,-20.598f,-110.906f,-22.799f;
   //K << -0.1225,-0.3952,-15.5213,-2.6976;
+
   setpoint << 1, 0, 0, 0;
   size_t count = 0;
 
   while(time < duration){
 
-    // if((count%5000) == 0){
-    //   setpoint(0) *= -1;
-    // }
+    if((count%5000) == 0){
+      setpoint(0) *= -1;
+    }
 
+    u = -(K * (x - setpoint))(0);
+    u = std::clamp(u, -15.0, 15.0);
+    
     myFile << time << "," << x(0) << "," << x(2) << "\n";
 
-    //u = -(K * (x - setpoint))(0);
+    rk4_step(&x, &x, u, M, m, l, g, dt);
 
-    nonlinear_dynamics(&x, &x_dot, u, M, m, l, g);
-    x += x_dot*dt;
     time += dt;
     count += 1;
 
@@ -98,8 +104,22 @@ void nonlinear_dynamics(const Eigen::Vector4d* curr_state, Eigen::Vector4d* stat
 }
 
 void rk4_step(const Eigen::Vector4d* curr_state, Eigen::Vector4d* next_state, double F, double M, double m, double L, double g, double dt){
-  
 
+  Eigen::Vector4d k1 = Eigen::Vector4d::Zero();
+  Eigen::Vector4d k2 = Eigen::Vector4d::Zero();
+  Eigen::Vector4d k3 = Eigen::Vector4d::Zero();
+  Eigen::Vector4d k4 = Eigen::Vector4d::Zero();
+
+  Eigen::Vector4d state = (*curr_state);
   
+  nonlinear_dynamics(&state, &k1, F, M, m, L, g);
+  state = (*curr_state) + 0.5*dt*k1;
+  nonlinear_dynamics(&state, &k2, F, M, m, L, g);
+  state = (*curr_state) + 0.5*dt*k2 ;
+  nonlinear_dynamics(&state, &k3, F, M, m, L, g);
+  state = (*curr_state) + dt*k3;
+  nonlinear_dynamics(&state, &k4, F, M, m, L, g);
+
+  (*next_state) = (*curr_state) + (dt/6.0)*(k1 + 2.0*k2 + 2.0*k3 + k4);
 
 }
