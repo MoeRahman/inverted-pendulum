@@ -284,8 +284,7 @@ k_1 \\
 k_2 \\
 k_3 \\
 k_4 \\
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 5\\
 9.32 + 21.57\\
@@ -293,14 +292,14 @@ k_4 \\
 2.4024\\
 \end{bmatrix}
 $$
+
 $$
 \begin{bmatrix}
 k_1 \\
 k_2 \\
 k_3 \\
 k_4 \\
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 -0.1225\\
 -0.3952\\
