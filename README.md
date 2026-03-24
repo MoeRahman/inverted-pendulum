@@ -185,3 +185,123 @@ $$y = \begin{bmatrix}
 0&0&0&1\end{bmatrix}x$$ 
 
 In other words, all state variables are observable with no noise, *not always the case*.
+
+### March 23, 2026
+Phase I - Obtain the linear system model of the inverted pendulum
+
+Given our inverted pendulum system: 
+$$
+\dot x = 
+\begin{bmatrix} 
+0&1&0&0\\
+0&0&-\frac{mg}{M}&0\\
+0&0&0&1\\
+0&0&0&\frac{(M+m)g}{ML}
+\end{bmatrix}x~+~
+\begin{bmatrix}
+0\\\frac{1}{M}\\0\\-\frac{1}{ML}
+\end{bmatrix}u
+$$
+
+We can design an input response proportional to the state $u = -Kx$, such that the eigen values of the system $A-BK$ are on the left hand side of the complex plane. This is done by either equating the coefficients of the characteristic equation of the system $A-BK$ and the characteristic polynomials with the roots as the eigen values: 
+
+$$P_{des}(s) = (s - \lambda_1)(s - \lambda_2)(s - \lambda_3)(s - \lambda_4)$$
+
+$$P_{des}(s) = s^4 + \alpha_3 s^3 + \alpha_2 s^2 + \alpha_1 s + \alpha_0$$
+
+And equate the coefficients with the system's characteristic equation:
+
+$$ P_{act}(s) = det(sI - (A-BK)) $$
+
+$$ P_{act}(s) = s^4 + (f_3(K))s^3 + (f_2(K))s^2 + (f_1(K))s + (f_0(K))$$
+
+$$
+\begin{bmatrix}
+f_3(k_1, k_2, k_3, k_4) \\
+f_2(k_1, k_2, k_3, k_4) \\
+f_1(k_1, k_2, k_3, k_4) \\
+f_0(k_1, k_2, k_3, k_4) \\
+\end{bmatrix} = 
+\begin{bmatrix}
+\alpha_3 \\
+\alpha_2 \\
+\alpha_1 \\
+\alpha_0 \\
+\end{bmatrix}
+$$
+
+We can now solve the system of linear equations to solve for the values of $k_1, k_2, k_3, k_4$ and use it to construct the control signal $u = -Kx$. Another way to calculate the constants of $K$ matrix is to use Ackermann's Formula by calculate the controllability matrix and defining a desired polynomial $P(A) = A^4 + \alpha_3A^3 + \alpha_2A^2 + \alpha_1A + \alpha_0$ and calculate K, $K = [0, 0, 0, 1]C^{-1}P(A)$.
+
+Here is an example $m = 0.1, M = 1, l = 0.5, g = 9.80665$ the system equation $A, B, K$:
+
+$$
+A = 
+\begin{bmatrix}
+0 & 1 & 0 & 0 \\
+0 & 0 & -0.98 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & 21.57 & 0 \\
+\end{bmatrix}
+~~~~~
+B = 
+\begin{bmatrix}
+0 \\
+1 \\
+0 \\
+-2 \\
+\end{bmatrix}
+~~~~~
+K = 
+\begin{bmatrix}
+k_1, k_2, k_3, k_4
+\end{bmatrix}
+$$
+
+Using the characteristic polynomial: 
+
+$$det(sI - (A-BK)) = k_1s^2 - 19.61k_1 + k_2s^3 -19.61k_2s - 2k_3s^2 + 2k_4s^3 + s^4 - 21.52s^2 = 0$$
+
+And the desired characteristic polynomial:
+
+$$ P_{des}(s) = s^4 + 5s^3 + 9.35s^2 + 7.75s + 2.4024$$
+
+Setup the system of equations and solve:
+
+$$ 
+\begin{bmatrix}
+0 & 1 & 0 & -2 \\
+1 & 0 & -2 & 0 \\
+0 & -19.61 & 0 & 0 \\
+-19.61 & 1 & 0 & 0 \\
+\end{bmatrix}
+\begin{bmatrix}
+k_1 \\
+k_2 \\
+k_3 \\
+k_4 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+5\\
+9.32 + 21.57\\
+7.75\\
+2.4024\\
+\end{bmatrix}
+$$
+$$
+\begin{bmatrix}
+k_1 \\
+k_2 \\
+k_3 \\
+k_4 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.1225\\
+-0.3952\\
+-15.5213\\
+-2.6976\\
+\end{bmatrix}
+$$
+
+We now have the constants needed for to push the poles to the left plane, and for faster response we can choose larger negative eigen values.
