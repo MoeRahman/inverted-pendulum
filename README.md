@@ -309,3 +309,10 @@ k_4 \\
 $$
 
 We now have the constants needed for to push the poles to the left plane, and for faster response we can choose larger negative eigen values.
+
+### March 24, 2026
+Phase I - Obtain the linear system model of the inverted pendulum, 
+
+- Modeled non-linear dynamics
+- Tested Open-Loop Response 
+- Tested gain matrix K calculated for linearized system on non-linear system
