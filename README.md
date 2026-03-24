@@ -234,14 +234,8 @@ We can now solve the system of linear equations to solve for the values of $k_1,
 
 Here is an example $m = 0.1, M = 1, l = 0.5, g = 9.80665$ the system equation $A, B, K$:
 
-$$
-A = 
-\begin{bmatrix}
-0 & 1 & 0 & 0 \\
-0 & 0 & -0.98 & 0 \\
-0 & 0 & 0 & 1 \\
-0 & 0 & 21.57 & 0 \\
-\end{bmatrix}
+$$A = \begin{bmatrix}
+0 & 1 & 0 & 0 \\ 0 & 0 & -0.98 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 21.57 & 0 \\ \end{bmatrix}
 ~~~~~
 B = 
 \begin{bmatrix}
