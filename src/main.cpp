@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-typedef enum {GENTLE, AGRESSIVE}control_t;
+typedef enum {GENTLE, AGRESSIVE, OPTIMAL}control_t;
 
 void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains);
 
@@ -46,7 +46,7 @@ int main() {
   x << 0, 0, -0.2, 0;
   B << 0, 1/M, 0, -1/(M*l);
 
-  control_t ctrl_gain_type = GENTLE;
+  control_t ctrl_gain_type = OPTIMAL;
   gain_settings(ctrl_gain_type, &K);
 
   setpoint << 1, 0, 0, 0;
@@ -54,17 +54,12 @@ int main() {
 
   while(time < duration){
 
-    if((count%5000) == 0){
+    if((count%10000) == 0){
       setpoint(0) *= -1;
     }
 
-    if(count >= 15000){
-      ctrl_gain_type = AGRESSIVE;
-      gain_settings(ctrl_gain_type, &K);
-    }
-
     u = -(K * (x - setpoint))(0);
-    u = std::clamp(u, -15.0, 15.0);
+    u = std::clamp(u, -20.0, 20.0);
 
     myFile << time << "," << x(0) << "," << x(2) << "\n";
 
@@ -95,7 +90,9 @@ void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains){
       //(*Gains) << -9.3780,  -11.5089,  -64.0490,  -14.2545;
       //(*Gains) << -30.166,  -20.390,  -100.643,  -10.695;
       break;
+    case OPTIMAL:
+      (*Gains) << -10.000,   -23.712,  -237.411,  -113.135;
+      break;
   }
-
 
 }
