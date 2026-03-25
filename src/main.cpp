@@ -3,6 +3,9 @@
 #include <iostream>
 #include <fstream>
 
+typedef enum {GENTLE, AGRESSIVE}control_t;
+
+void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains);
 
 int main() {
 
@@ -43,14 +46,8 @@ int main() {
   x << 0, 0, -0.2, 0;
   B << 0, 1/M, 0, -1/(M*l);
 
-  //GENTLE CONTROLS
-  K << -1.3003,-2.3173,-26.6124,-5.6587;
-  //K << -12.237f,-20.598f,-110.906f,-22.799f;
-  //K << -0.1225,-0.3952,-15.5213,-2.6976;
-  //AGRESSIVE CONTROLS
-  //K <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
-  //K << -9.3780,  -11.5089,  -64.0490,  -14.2545;
-  //K << -30.166,  -20.390,  -100.643,  -10.695;
+  control_t ctrl_gain_type = GENTLE;
+  gain_settings(ctrl_gain_type, &K);
 
   setpoint << 1, 0, 0, 0;
   size_t count = 0;
@@ -59,6 +56,11 @@ int main() {
 
     if((count%5000) == 0){
       setpoint(0) *= -1;
+    }
+
+    if(count >= 15000){
+      ctrl_gain_type = AGRESSIVE;
+      gain_settings(ctrl_gain_type, &K);
     }
 
     u = -(K * (x - setpoint))(0);
@@ -76,4 +78,24 @@ int main() {
   myFile.close();
 
   return 0;
+}
+
+void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains){
+
+  switch(control_mode){
+    case GENTLE:
+      //GENTLE CONTROLS
+      (*Gains) <<  -1.3003,-2.3173,-26.6124,-5.6587;
+      //(*Gains) << -12.237f,-20.598f,-110.906f,-22.799f;
+      //(*Gains) << -0.1225,-0.3952,-15.5213,-2.6976;
+      break;
+    case AGRESSIVE:
+      //AGRESSIVE CONTROLS
+      //(*Gains) <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
+      //(*Gains) << -9.3780,  -11.5089,  -64.0490,  -14.2545;
+      //(*Gains) << -30.166,  -20.390,  -100.643,  -10.695;
+      break;
+  }
+
+
 }
