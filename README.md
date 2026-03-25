@@ -316,3 +316,7 @@ Phase I - Obtain the linear system model of the inverted pendulum,
 - Modeled non-linear dynamics
 - Tested Open-Loop Response 
 - Tested gain matrix K calculated for linearized system on non-linear system
+
+### March 25, 2025
+Derived gains to control non-linear model using LQR controls gains were calculated using Matlab's lqr function.
+
