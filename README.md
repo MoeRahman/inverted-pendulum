@@ -178,11 +178,9 @@ Here $u(t)$ is the input force applied to drive the cart's position. A few key i
 
 If we drive the system with a DC motor we need to include the model dynamics for a DC motor into the system. Additionally, we are under the assumption that we are dealing with a full-state feedback system: 
 
-$$y = \begin{bmatrix} 
-1&0&0&0\\
-0&1&0&0\\
-0&0&1&0\\ 
-0&0&0&1\end{bmatrix}x$$ 
+$$ 
+y = Ix 
+$$ 
 
 In other words, all state variables are observable with no noise, *not always the case*.
 

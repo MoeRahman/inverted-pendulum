@@ -54,7 +54,7 @@ int main() {
 
   while(time < duration){
 
-    if((count%10000) == 0){
+    if((count%1000) == 0){
       setpoint(0) *= -1;
     }
 
@@ -86,7 +86,7 @@ void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains){
       break;
     case AGRESSIVE:
       //AGRESSIVE CONTROLS
-      //(*Gains) <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
+      (*Gains) <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
       //(*Gains) << -9.3780,  -11.5089,  -64.0490,  -14.2545;
       //(*Gains) << -30.166,  -20.390,  -100.643,  -10.695;
       break;
