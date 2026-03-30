@@ -148,7 +148,7 @@ A=\begin{bmatrix}
 0&1&0&0\\
 0&0&-\frac{mg}{M}&0\\
 0&0&0&1\\
-0&0&0&\frac{(M+m)g}{ML}
+0&0&\frac{(M+m)g}{ML}&0
 \end{bmatrix}~
 B=\begin{bmatrix}
 0\\
@@ -164,7 +164,7 @@ $$
 0&1&0&0\\
 0&0&-\frac{mg}{M}&0\\
 0&0&0&1\\
-0&0&0&\frac{(M+m)g}{ML}
+0&0&\frac{(M+m)g}{ML}&0
 \end{bmatrix}x~+~
 \begin{bmatrix}
 0\\
@@ -194,7 +194,7 @@ $$
 0&1&0&0\\
 0&0&-\frac{mg}{M}&0\\
 0&0&0&1\\
-0&0&0&\frac{(M+m)g}{ML}
+0&0&\frac{(M+m)g}{ML}&0
 \end{bmatrix}x~+~
 \begin{bmatrix}
 0\\\frac{1}{M}\\0\\-\frac{1}{ML}
