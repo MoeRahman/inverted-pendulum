@@ -9,10 +9,16 @@ void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains);
 
 int main() {
 
+  // Inverted Pendulum Params
   constexpr double g = 9.80665;
   constexpr double m = 0.1; //ball mass
   constexpr double M = 1; //cart mass
   constexpr double l = 0.5; //pole length
+
+  // DC Motor Params
+  constexpr double k1 = 0; //torque constant
+  constexpr double k2 = 0; //back-emf constant
+  constexpr double R = 0;  //motor internal resistance
 
   //write data to csv file
   std::ofstream myFile("data.csv");

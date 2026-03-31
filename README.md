@@ -3,23 +3,19 @@ The simulation of the classic invertered pendulum controls problem. The hope is 
 
 ## Tentitive Plan:
 
-__Phase I - Single Pendulum Simulation:__ *Equations of motion · Euler/RK4 integrator · Visualization · PID angle then cascaded cart+angle*
+__Phase I - Single Pendulum Simulation:__ *Equations of motion · Euler/RK4 integrator · Visualization · PID angle then cascaded cart+angle · Add friction · Encoder quantization · Motor deadband · Kalman / EKF noise estimation · LQR · Pole placement · Full state feedback · Lyapunov stability · swing-up energy method*
 
 __Phase II - STM32 Model Build:__ *Encoder + IMU sensing · Motor driver · Real-time loop · Port PID from sim*
 
-__Phase III - Sim/Real Comparison + Sim Fidelity:__ *Add friction · Encoder quantization · Motor deadband · Kalman / EKF noise estimation*
+__Phase III - Double Pendulum Simulation & Hardware:__ *Lagrangian derivation · Chaos sensitivity · UKF state estimation · LQR near equilibrium*
 
-__Phase IV - Advanced Control On Single Pendulum:__ *LQR · Pole placement · Full state feedback · Lyapunov stability · swing-up energy method*
+__Phase IV - Data-Driven Double Pendulum:__ *RL (PPO/SAC) · MPC · Generalized moment / Beneš filter comparison*
 
-__Phase V - Double Pendulum Simulation & Hardware:__ *Lagrangian derivation · Chaos sensitivity · UKF state estimation · LQR near equilibrium*
+__Phase V - Triple Pendulum Simulation & Hardware:__ *Higher-order Lagrangian · Mechanical design challenge · Structural resonance*
 
-__Phase VI - Data-Driven Double Pendulum:__ *RL (PPO/SAC) · MPC · Generalized moment / Beneš filter comparison*
+__Phase VI - Deep-Learning & Transformers On Triple:__ *LSTM policy · Decision transformer · World model · Sim-to-real transfer*
 
-__Phase VII - Triple Pendulum Simulation & Hardware:__ *Higher-order Lagrangian · Mechanical design challenge · Structural resonance*
-
-__Phase VIII - Deep-Learning & Transformers On Triple:__ *LSTM policy · Decision transformer · World model · Sim-to-real transfer*
-
-__Phase IX - Benchmarking:__ *Estimator benchmarks · Control hierarchy comparison · Literature gaps*
+__Phase VII - Benchmarking:__ *Estimator benchmarks · Control hierarchy comparison · Literature gaps*
 
 ## Updates:
 Updates on the project here.
@@ -406,3 +402,18 @@ $$
 $$
 
 With the above two equations we are able to see the control response with a voltage input to a DC motor.
+
+The new state-space model: 
+
+$$
+\dot x = 
+\begin{bmatrix} 
+0&1&0&0\\
+0&-\frac{K_1K_2}{r^2MR}&-\frac{mg}{M}&0\\
+0&0&0&1\\
+0&\frac{K_1K_2}{r^2MLR}&\frac{(M+m)g}{ML}&0
+\end{bmatrix}x~+~
+\begin{bmatrix}
+0\\\frac{K_1}{rMR}\\0\\-\frac{K_1}{rMLR}
+\end{bmatrix}e
+$$
