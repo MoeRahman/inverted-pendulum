@@ -318,3 +318,91 @@ Phase I - Obtain the linear system model of the inverted pendulum,
 ### March 25, 2025
 Derived gains to control non-linear model using LQR controls gains were calculated using Matlab's lqr function.
 
+
+### March 31, 2025
+Derived the dynamic equations of driving the inverted pendulum with a DC motor rather than a linear force input: 
+
+Starting with the Faraday's Law of Induction and Ampere's Law for a force produced on a conductor in a magnetic field.
+
+$$
+J\ddot\theta=K_1i
+$$ 
+
+$$
+v=K_2\dot\theta
+$$
+
+Using Ohm's Law we can write the above two relations as one equations:
+
+$$
+(e-v) = Ri
+$$
+
+$$
+J\ddot\theta = \frac{K_1}{R}e-\frac{K_1K_2}{R}\dot\theta
+$$
+
+Moving forward we are going to assume the moment of inertia of the wheel attached to the DC motor shaft is negligible. Now we can incorporate the above ODE with the linearized equations for the Inverted pendulum to come up with the consolidated model using a Torque to Force relation $\mathcal{T}=rF$.
+
+$$
+\boxed{(M+m)\ddot x + mL\ddot\theta = F} ~~~ \boxed{\ddot x = g\theta - L\ddot\theta}
+$$
+
+$$
+((M+m)\ddot x + mL\ddot\theta)r = Fr = \mathcal{T}
+$$
+$$
+((M+m)\ddot x + mL\ddot\theta)r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+(M+m)(g\theta-L\ddot\theta)r + mLr\ddot\theta = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+M(g\theta-L\ddot\theta)r + m(g\theta-L\ddot\theta)r + mLr\ddot\theta = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+M(g\theta-L\ddot\theta)r + mg\theta r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+Mgr\theta-MLr\ddot\theta + mg\theta r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+\ddot\theta = \frac{1}{MLr}(Mgr\theta + mg\theta r - \frac{K_1}{R}e + \frac{K_1K_2}{R}\dot\theta)
+$$
+
+$$
+\ddot\theta = \frac{g}{L}\theta + \frac{mg}{ML}\theta - \frac{K_1}{MLrR}e + \frac{K_1K_2}{MLrR}\dot\theta
+$$
+
+$$
+\ddot\theta = \frac{(M+m)g}{ML}\theta - \frac{K_1}{MLrR}e + \frac{K_1K_2}{MLr^2R}\dot x
+$$
+
+Similarly, we can obtain the equation for $\ddot x$:
+
+$$
+((M+m)\ddot x + mL(\frac{g\theta - \ddot x}{L}))r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+((M+m)\ddot x + m(g\theta - \ddot x))r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+(M\ddot x + m\ddot x + mg\theta - m\ddot x)r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
+$$
+
+$$
+M\ddot x + mg\theta = \frac{K_1}{rR}e - \frac{K_1K_2}{r^2R}\dot x
+$$
+
+$$
+\ddot x = \frac{K_1}{rMR}e - \frac{K_1K_2}{r^2MR}\dot x - \frac{mg\theta}{M} 
+$$
+
+With the above two equations we are able to see the control response with a voltage input to a DC motor.
