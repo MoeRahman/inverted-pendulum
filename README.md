@@ -412,8 +412,29 @@ $$
 0&\frac{K_1K_2}{r^2MLR}&\frac{(M+m)g}{ML}&0
 \end{bmatrix}x~+~
 \begin{bmatrix}
-0\\\frac{K_1}{rMR}\\0\\-\frac{K_1}{rMLR}
+0\\
+\frac{K_1}{rMR}\\
+0\\
+-\frac{K_1}{rMLR}
 \end{bmatrix}e
 $$
 
 ### April 1, 2026
+
+Previously, Matlab was used to calculate the optimal gains using the lqr() function available in the matlab control library. The function outputs the full-state feedback gain matrix K, the unique stabilized solution to the continuous-time Ricatti Equation X, and the closed-loop poles L.
+
+For the system: $\dot x = Ax + Bu$ at the initial value of $x(0) = x_0$ the gains of the full state-feedback system can be calculated by setting up a cost function:
+
+$$
+\dot x = (A-BK)x
+$$
+
+$$
+J(x_0) = \int_0^\infty{(x'Qx + u'Ru + 2x'Su)dt}
+$$
+
+And the closed-loop poles will be the eigen values and of the state-transition matrix $\phi_c=A-BK$.
+
+$$
+L = det(\phi_c-\lambda I)
+$$
