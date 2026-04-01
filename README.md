@@ -311,11 +311,11 @@ Phase I - Obtain the linear system model of the inverted pendulum,
 - Tested Open-Loop Response 
 - Tested gain matrix K calculated for linearized system on non-linear system
 
-### March 25, 2025
+### March 25, 2026
 Derived gains to control non-linear model using LQR controls gains were calculated using Matlab's lqr function.
 
 
-### March 31, 2025
+### March 31, 2026
 Derived the dynamic equations of driving the inverted pendulum with a DC motor rather than a linear force input: 
 
 Starting with the Faraday's Law of Induction and Ampere's Law for a force produced on a conductor in a magnetic field.
@@ -401,9 +401,7 @@ $$
 \ddot x = \frac{K_1}{rMR}e - \frac{K_1K_2}{r^2MR}\dot x - \frac{mg\theta}{M} 
 $$
 
-With the above two equations we are able to see the control response with a voltage input to a DC motor.
-
-The new state-space model: 
+With the above two equations we are able to see the control response with a voltage input to a DC motor. The new state-space model: 
 
 $$
 \dot x = 
@@ -417,3 +415,5 @@ $$
 0\\\frac{K_1}{rMR}\\0\\-\frac{K_1}{rMLR}
 \end{bmatrix}e
 $$
+
+### April 1, 2026
