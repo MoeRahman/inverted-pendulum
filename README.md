@@ -1,6 +1,15 @@
 # Project Overview:
 The simulation of the classic invertered pendulum controls problem. The hope is to increase complexity in the controller and system design to improve fidelity of the state-space model and design more sophisticated controllers around the model.
 
+# Build Instructions
+In order to build the project you must have cmake installed. With cmake installed you can run the following commands:
+
+`cmake --build build`
+
+This will invode the build tool native to your system like make for the project which should already be configured in a build directory.
+
+``
+
 ## Tentitive Plan:
 
 __Phase I - Single Pendulum Simulation:__ *Equations of motion · Euler/RK4 integrator · Visualization · PID angle then cascaded cart+angle · Add friction · Encoder quantization · Motor deadband · Kalman / EKF noise estimation · LQR · Pole placement · Full state feedback · Lyapunov stability · swing-up energy method*
