@@ -3,7 +3,10 @@
 #include <iostream>
 #include <fstream>
 
-typedef enum {GENTLE, AGRESSIVE, OPTIMAL}control_t;
+typedef enum {
+  GENTLE, AGRESSIVE, OPTIMAL, 
+  GENTLE_DC, AGRESSIVE_DC, OPTIMAL_DC
+}control_t;
 
 void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains);
 
@@ -16,9 +19,10 @@ int main() {
   constexpr double l = 0.5; //pole length
 
   // DC Motor Params
-  constexpr double k1 = 0; //torque constant
-  constexpr double k2 = 0; //back-emf constant
-  constexpr double R = 0;  //motor internal resistance
+  constexpr double k1 = 1; //torque constant
+  constexpr double k2 = 1; //back-emf constant
+  constexpr double R = 1;  //motor internal resistance
+  constexpr double r = 1; //torque to force ratio
 
   //write data to csv file
   std::ofstream myFile("data.csv");
@@ -28,7 +32,7 @@ int main() {
     return 1;
   }
 
-  myFile << "Time,Pos_X,Angle\n";
+  myFile << "Time,Pos_X,Angle,Voltage\n";
 
   //Simulate
   const double duration {30};
@@ -40,19 +44,20 @@ int main() {
   Eigen::Vector4d x_dot;
   Eigen::Vector4d B;
   Eigen::RowVector4d K;
-  double u{0};
+  double u{0}; // Input here is now the voltage to DC motor
   Eigen::Vector4d setpoint;
 
   // This is the linearized state
   A << 0, 1, 0, 0, 
-       0, 0, -m*g/M, 0, 
+       0, -k1*k2/(M*R*r*r), -m*g/M, 0, 
        0, 0, 0, 1, 
-       0, 0, (M + m)*g/(M*l), 0;
+       0, k1*k2/(M*l*R*r*r), (M + m)*g/(M*l), 0;
 
   x << 0, 0, -0.2, 0;
-  B << 0, 1/M, 0, -1/(M*l);
+  B << 0, k1/(r*M*R), 0, -k1/(r*M*l*R);
 
-  control_t ctrl_gain_type = OPTIMAL;
+  // PICK A CONTROLLER TYPE: GENTLE, AGRESSIVE, OPTIMAL, GENTLE_DC, AGRESSIVE_DC, OPTIMAL_DC
+  control_t ctrl_gain_type = OPTIMAL_DC;
   gain_settings(ctrl_gain_type, &K);
 
   setpoint << 1, 0, 0, 0;
@@ -60,14 +65,14 @@ int main() {
 
   while(time < duration){
 
-    if((count%1000) == 0){
+    if((count%2500) == 0){
       setpoint(0) *= -1;
     }
 
     u = -(K * (x - setpoint))(0);
-    u = std::clamp(u, -20.0, 20.0);
+    u = std::clamp(u, -12.0, 12.0);
 
-    myFile << time << "," << x(0) << "," << x(2) << "\n";
+    myFile << time << ',' << x(0) << ',' << x(2) << ',' << u << '\n';
 
     rk4_step(&x, &x, u, M, m, l, g, dt);
 
@@ -85,19 +90,22 @@ void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains){
 
   switch(control_mode){
     case GENTLE:
-      //GENTLE CONTROLS
       (*Gains) <<  -1.3003,-2.3173,-26.6124,-5.6587;
-      //(*Gains) << -12.237f,-20.598f,-110.906f,-22.799f;
-      //(*Gains) << -0.1225,-0.3952,-15.5213,-2.6976;
       break;
     case AGRESSIVE:
-      //AGRESSIVE CONTROLS
       (*Gains) <<  -2.5390,   -3.9352,  -34.1295,   -7.4676;
-      //(*Gains) << -9.3780,  -11.5089,  -64.0490,  -14.2545;
-      //(*Gains) << -30.166,  -20.390,  -100.643,  -10.695;
       break;
     case OPTIMAL:
       (*Gains) << -10.000,   -23.712,  -237.411,  -113.135;
+      break;
+    case GENTLE_DC:
+      (*Gains) <<  -0.1225, -1.3951, -15.5235, -2.6976;
+      break;
+    case AGRESSIVE_DC:
+      (*Gains) <<  -9.0346,  -10.9102,  -55.2573,  -12.2551;
+      break;
+    case OPTIMAL_DC:
+      (*Gains) <<  -10.000,  -10.267,  -52.147,  -11.563;
       break;
   }
 
