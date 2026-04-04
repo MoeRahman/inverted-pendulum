@@ -414,4 +414,7 @@ $$
 
 But we can do this step ourselves in software to find the optimal gain matrix K. Given our new system with the DC motor we can calculate optimal gain matrix by solving the algebraic ricatti equation.
 
+### April 3
+
+Obtained the gain matrix for inverted pendulum system with the DC motor and created options to switch between slow, fast and optimal controls.
 
