@@ -78,8 +78,10 @@ int main() {
 
     myFile << time << ',' << x(0) << ',' << x(2) << ',' << u << ',' << setpoint(0) << '\n';
 
-    rk4_step(&x, &x, u, M, m, l, g, dt);
-
+    Eigen::Vector4d x_next;
+    rk4_step(&x, &x_next, u, M, m, l, g, dt);
+    x = x_next;
+    
     time += dt;
     count += 1;
 
