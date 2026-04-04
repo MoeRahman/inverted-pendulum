@@ -441,3 +441,16 @@ But we can do this step ourselves in software to find the optimal gain matrix K.
 
 Obtained the gain matrix for inverted pendulum system with the DC motor and created options to switch between slow, fast and optimal controls.
 
+Here are the Q and R matrices used to compute the optimal gains for the DC motor driven inverted pendulum model. 
+
+$$
+Q = \begin{bmatrix} 
+200&0&0&0\\
+0&1&0&0\\
+0&0&10&0\\
+0&0&0&1\\
+\end{bmatrix}~~~
+R = 2
+$$
+
+Next steps might be to develop the Energy-Swing Meneuver and also implement a Kalman Filter to position and angle estimation.
