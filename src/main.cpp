@@ -32,7 +32,7 @@ int main() {
     return 1;
   }
 
-  myFile << "Time,Pos_X,Angle,Voltage\n";
+  myFile << "Time,Pos_X,Angle,Voltage,Setpoint\n";
 
   //Simulate
   const double duration {30};
@@ -65,14 +65,18 @@ int main() {
 
   while(time < duration){
 
-    if((count%2500) == 0){
+    //STEP INPUT
+    if((count%3000) == 0){
       setpoint(0) *= -1;
     }
+
+    //SINE INPUT
+    //setpoint(0) = 0.5*sin(time);
 
     u = -(K * (x - setpoint))(0);
     u = std::clamp(u, -12.0, 12.0);
 
-    myFile << time << ',' << x(0) << ',' << x(2) << ',' << u << '\n';
+    myFile << time << ',' << x(0) << ',' << x(2) << ',' << u << ',' << setpoint(0) << '\n';
 
     rk4_step(&x, &x, u, M, m, l, g, dt);
 
