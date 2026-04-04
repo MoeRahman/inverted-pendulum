@@ -453,4 +453,9 @@ Q = \begin{bmatrix}
 R = 2
 $$
 
-Next steps might be to develop the Energy-Swing Meneuver and also implement a Kalman Filter to position and angle estimation.
+Next steps might be to:
+- Develop the Energy-Swing Meneuver
+- Implement a Kalman Filter to position and angle estimation
+- Create ARE solver in C
+- Encoder/Sensor Quantization (Sensor Modeling)
+- Friction Modelling
