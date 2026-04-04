@@ -347,32 +347,13 @@ $$
 $$
 ((M+m)\ddot x + mL\ddot\theta)r = Fr = \mathcal{T}
 $$
+
 $$
 ((M+m)\ddot x + mL\ddot\theta)r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
 $$
 
 $$
-(M+m)(g\theta-L\ddot\theta)r + mLr\ddot\theta = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
-M(g\theta-L\ddot\theta)r + m(g\theta-L\ddot\theta)r + mLr\ddot\theta = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
-M(g\theta-L\ddot\theta)r + mg\theta r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
-Mgr\theta-MLr\ddot\theta + mg\theta r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
 \ddot\theta = \frac{1}{MLr}(Mgr\theta + mg\theta r - \frac{K_1}{R}e + \frac{K_1K_2}{R}\dot\theta)
-$$
-
-$$
-\ddot\theta = \frac{g}{L}\theta + \frac{mg}{ML}\theta - \frac{K_1}{MLrR}e + \frac{K_1K_2}{MLrR}\dot\theta
 $$
 
 $$
@@ -383,14 +364,6 @@ Similarly, we can obtain the equation for $\ddot x$:
 
 $$
 ((M+m)\ddot x + mL(\frac{g\theta - \ddot x}{L}))r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
-((M+m)\ddot x + m(g\theta - \ddot x))r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
-$$
-
-$$
-(M\ddot x + m\ddot x + mg\theta - m\ddot x)r = \frac{K_1}{R}e - \frac{K_1K_2}{R}\dot\theta
 $$
 
 $$
@@ -438,3 +411,7 @@ And the closed-loop poles will be the eigen values and of the state-transition m
 $$
 L = det(\phi_c-\lambda I)
 $$
+
+But we can do this step ourselves in software to find the optimal gain matrix K. Given our new system with the DC motor we can calculate optimal gain matrix by solving the algebraic ricatti equation.
+
+
