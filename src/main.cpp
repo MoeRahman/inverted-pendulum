@@ -15,14 +15,14 @@ int main() {
   // Inverted Pendulum Params
   constexpr double g = 9.80665;
   constexpr double m = 0.1; //ball mass
-  constexpr double M = 1; //cart mass
+  constexpr double M = 1;   //cart mass
   constexpr double l = 0.5; //pole length
 
   // DC Motor Params
   constexpr double k1 = 1; //torque constant
   constexpr double k2 = 1; //back-emf constant
   constexpr double R = 1;  //motor internal resistance
-  constexpr double r = 1; //torque to force ratio
+  constexpr double r = 1;  //torque to force ratio
 
   //write data to csv file
   std::ofstream myFile("data.csv");
@@ -81,7 +81,7 @@ int main() {
     Eigen::Vector4d x_next;
     rk4_step(&x, &x_next, u, M, m, l, g, dt);
     x = x_next;
-    
+
     time += dt;
     count += 1;
 
