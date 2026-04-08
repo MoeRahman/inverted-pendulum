@@ -437,7 +437,7 @@ $$
 
 But we can do this step ourselves in software to find the optimal gain matrix K. Given our new system with the DC motor we can calculate optimal gain matrix by solving the algebraic ricatti equation.
 
-### April 3
+### April 3, 2026
 
 Obtained the gain matrix for inverted pendulum system with the DC motor and created options to switch between slow, fast and optimal controls.
 
@@ -455,7 +455,11 @@ $$
 
 Next steps might be to:
 - Develop the Energy-Swing Meneuver
-- Implement a Kalman Filter to position and angle estimation
+- Implement a Kalman Filter for position and angle estimation
 - Create ARE solver in C
 - Encoder/Sensor Quantization (Sensor Modeling)
 - Friction Modelling
+
+### April 8, 2026
+
+
