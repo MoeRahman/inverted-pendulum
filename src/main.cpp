@@ -13,17 +13,21 @@ void gain_settings(control_t control_mode, Eigen::RowVector4d* Gains);
 int main() {
 
   // Inverted Pendulum Params
-  constexpr double g = 9.80665;
-  constexpr double m = 0.1; //ball mass
-  constexpr double M = 1;   //cart mass
-  constexpr double l = 0.5; //pole length
+  pendulumParams_t pendulum_1{
+    .g = 9.80665f,
+    .m = =0.1,
+    .M = 1,
+    .l = 0.5f 
+  };
 
   // DC Motor Params
-  constexpr double k1 = 1; //torque constant
-  constexpr double k2 = 1; //back-emf constant
-  constexpr double R = 1;  //motor internal resistance
-  constexpr double r = 1;  //torque to force ratio
-
+  dcMotorParams_t motor_1{
+    .k1 = 1f,
+    .k2 = 1f,
+    .R  = 1f,
+    .r  = 1f
+  };
+  
   //write data to csv file
   std::ofstream myFile("data.csv");
 
