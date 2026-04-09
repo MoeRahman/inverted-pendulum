@@ -72,10 +72,10 @@ void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
 
     pendulum_dynamics(&state, &k4, pendulum_params, F);
 
-    next_state.x         = curr_state->x         + (dt/6.0)*(k1.x         + 2.0*k2.x         + 2.0*k3.x         + k4.x);
-    next_state.x_dot     = curr_state->x_dot     + (dt/6.0)*(k1.x_dot     + 2.0*k2.x_dot     + 2.0*k3.x_dot     + k4.x_dot);
-    next_state.theta     = curr_state->theta     + (dt/6.0)*(k1.theta     + 2.0*k2.theta     + 2.0*k3.theta     + k4.theta);
-    next_state.theta_dot = curr_state->theta_dot + (dt/6.0)*(k1.theta_dot + 2.0*k2.theta_dot + 2.0*k3.theta_dot + k4.theta_dot);
+    next_state->x         = curr_state->x         + (dt/6.0)*(k1.x         + 2.0*k2.x         + 2.0*k3.x         + k4.x);
+    next_state->x_dot     = curr_state->x_dot     + (dt/6.0)*(k1.x_dot     + 2.0*k2.x_dot     + 2.0*k3.x_dot     + k4.x_dot);
+    next_state->theta     = curr_state->theta     + (dt/6.0)*(k1.theta     + 2.0*k2.theta     + 2.0*k3.theta     + k4.theta);
+    next_state->theta_dot = curr_state->theta_dot + (dt/6.0)*(k1.theta_dot + 2.0*k2.theta_dot + 2.0*k3.theta_dot + k4.theta_dot);
 
   }
 
