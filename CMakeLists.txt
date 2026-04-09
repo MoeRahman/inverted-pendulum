@@ -10,6 +10,7 @@ target_include_directories(inverted_pendulum PRIVATE
   include
 )
 
+# link the math.h library
 target_link_libraries(inverted_pendulum PRIVATE
   m
 )
@@ -24,3 +25,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug)
 endif()
 
+# Times each source file compilation
+set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
+
+# Times the final linking step
+set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK "${CMAKE_COMMAND} -E time")
