@@ -21,9 +21,11 @@ typedef struct{
   double theta_dot;
 }pendulum_state;
 
+extern pendulum_params_t pendulum_params;
+extern motor_params_t motor_params;
+
 void pendulum_dynamics(const pendulum_state* curr_state, 
   pendulum_state* next_state, pendulum_params_t pendulum_params, double F);
 
 void rk4_step(const pendulum_state* curr_state, pendulum_state* next_state,
   pendulum_params_t pendulum_parms, const double F, const double dt);
-
