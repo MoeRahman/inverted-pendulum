@@ -10,4 +10,8 @@ Makefile
 .DS_Store
 
 .vscode
+<<<<<<< HEAD
 main.cpp
+=======
+src/main.cpp
+>>>>>>> dev
