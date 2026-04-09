@@ -45,6 +45,37 @@ void pendulum_dynamics(const pendulum_state_t* curr_state,
 void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
   pendulum_params_t pendulum_parms, const double F, const double dt){
 
-    
+    pendulum_state_t k1 = {0,0,0,0};
+    pendulum_state_t k2 = {0,0,0,0};
+    pendulum_state_t k3 = {0,0,0,0};
+    pendulum_state_t k4 = {0,0,0,0};
+
+    pendulum_state_t state = *curr_state;
+
+    pendulum_dynamics(&state, &k1, pendulum_params, F);
+    state.x         = curr_state->x         + 0.5*dt*k1.x;
+    state.x_dot     = curr_state->x_dot     + 0.5*dt*k1.x_dot;
+    state.theta     = curr_state->theta     + 0.5*dt*k1.theta;
+    state.theta_dot = curr_state->theta_dot + 0.5*dt*k1.theta_dot;
+
+    pendulum_dynamics(&state, &k2, pendulum_params, F);
+    state.x         = curr_state->x         + 0.5*dt*k2.x;
+    state.x_dot     = curr_state->x_dot     + 0.5*dt*k2.x_dot;
+    state.theta     = curr_state->theta     + 0.5*dt*k2.theta;
+    state.theta_dot = curr_state->theta_dot + 0.5*dt*k2.theta_dot;
+
+    pendulum_dynamics(&state, &k3, pendulum_params, F);
+    state.x         = curr_state->x         + dt*k3.x;
+    state.x_dot     = curr_state->x_dot     + dt*k3.x_dot;
+    state.theta     = curr_state->theta     + dt*k3.theta;
+    state.theta_dot = curr_state->theta_dot + dt*k3.theta_dot;
+
+    pendulum_dynamics(&state, &k4, pendulum_params, F);
+
+    next_state.x         = curr_state->x         + (dt/6.0)*(k1.x         + 2.0*k2.x         + 2.0*k3.x         + k4.x);
+    next_state.x_dot     = curr_state->x_dot     + (dt/6.0)*(k1.x_dot     + 2.0*k2.x_dot     + 2.0*k3.x_dot     + k4.x_dot);
+    next_state.theta     = curr_state->theta     + (dt/6.0)*(k1.theta     + 2.0*k2.theta     + 2.0*k3.theta     + k4.theta);
+    next_state.theta_dot = curr_state->theta_dot + (dt/6.0)*(k1.theta_dot + 2.0*k2.theta_dot + 2.0*k3.theta_dot + k4.theta_dot);
+
   }
 
