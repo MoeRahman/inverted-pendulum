@@ -11,3 +11,4 @@ Makefile
 
 .vscode
 src/main.cpp
+src/physics.cpp
