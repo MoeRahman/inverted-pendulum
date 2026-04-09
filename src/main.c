@@ -3,7 +3,7 @@
 
 int main(){
 
-  FILE *fpt = fopen("data_one.csv", "w");
+  FILE *fpt = fopen("pendulum_sim.dat", "w");
 
   if (fpt == NULL) {
       printf("Error opening file!\n");
