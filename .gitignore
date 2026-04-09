@@ -10,5 +10,4 @@ Makefile
 .DS_Store
 
 .vscode
-src/main.cpp
-src/physics.cpp
+

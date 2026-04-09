@@ -1,4 +1,4 @@
-cmake --build build
+time cmake --build build
 ./build/inverted_pendulum
 
 gnuplot -p -e " set grid; 
