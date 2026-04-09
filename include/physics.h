@@ -4,7 +4,7 @@ typedef struct{
   const double g; //gravity
   const double m; //ball mass
   const double M; //cart mass
-  const double l; //pole length
+  const double L; //pole length
 }pendulum_params_t;
 
 typedef struct{
@@ -19,13 +19,13 @@ typedef struct{
   double x_dot;
   double theta;
   double theta_dot;
-}pendulum_state;
+}pendulum_state_t;
 
 extern pendulum_params_t pendulum_params;
 extern motor_params_t motor_params;
 
-void pendulum_dynamics(const pendulum_state* curr_state, 
-  pendulum_state* next_state, pendulum_params_t pendulum_params, double F);
+void pendulum_dynamics(const pendulum_state_t* curr_state, 
+  pendulum_state_t* next_state, pendulum_params_t pendulum_params, double F);
 
-void rk4_step(const pendulum_state* curr_state, pendulum_state* next_state,
+void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
   pendulum_params_t pendulum_parms, const double F, const double dt);
