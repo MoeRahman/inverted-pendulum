@@ -1,24 +1,13 @@
 #include "physics.h"
+#include <stdio.h>
 
 int main(){
 
-  pendulum_params_t pendulum_1{
-    .g = 9.80665f,
-    .m = 0.1,
-    .M = 1,
-    .l = 0.5f 
-  };
+  printf("%lf,%lf,%lf,%lf\n", pendulum_params.g, 
+    pendulum_params.m, pendulum_params.M, pendulum_params.l);
 
-  motor_params_t motor_1{
-    .k1 = 1f,
-    .k2 = 1f,
-    .R  = 1f,
-    .r  = 1f
-  };
+  printf("%lf,%lf,%lf,%lf\n", motor_params.k1, 
+    motor_params.k2, motor_params.R, motor_params.r);
 
-  
-
-
-  
   return 0;
 }
