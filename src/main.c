@@ -1,5 +1,6 @@
-#include "physics.h"
 #include "controller.h"
+#include "physics.h"
+#include <math.h>
 #include <stdio.h>
 
 int main(){
@@ -14,7 +15,6 @@ int main(){
   const double duration = 30;
   double time = 0;
   double dt = 0.001;
-  size_t count = 0;
 
   fprintf(fpt, "Time,Pos_X,Angle,Voltage,Setpoint\n");
 
@@ -27,9 +27,7 @@ int main(){
 
   while(time < duration){
 
-    if((count%2500) == 0){
-      setpoint.x *= -1;
-    }
+    setpoint.x = sin(time);
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.x, x.theta, u, setpoint.x);
 
@@ -41,7 +39,6 @@ int main(){
     x = next_state;
 
     time += dt;
-    count += 1;
   }
 
   fclose(fpt);
