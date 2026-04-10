@@ -461,5 +461,8 @@ Next steps might be to:
 - Friction Modelling
 
 ### April 8, 2026
+- Migrated C++ files to C11
 
-
+### April 9, 2026
+- Fixed a few migration bugs and stoped tracking C++ files
+- Hopes are that we can use these C files in embedded systems inverted pendulum
