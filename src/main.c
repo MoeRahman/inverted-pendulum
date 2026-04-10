@@ -12,23 +12,30 @@ int main(){
       return 1;
   }
 
-  const double duration = 30;
+  const double duration = 9;
   double time = 0;
   double dt = 0.001;
 
   fprintf(fpt, "Time,Pos_X,Angle,Voltage,Setpoint\n");
 
-  pendulum_state_t x = {0,0,0.05,0};
+  pendulum_state_t x = {0,0,0,0};
   gain_t K = {0,0,0,0};
   gain_settings(OPTIMAL_DC, &K);
   double u = 0;
       
-  pendulum_state_t setpoint = {1,0,0,0};
+  pendulum_state_t setpoint = {0,0,0,0};
 
   while(time < duration){
 
-    setpoint.x = sin(time);
+    //setpoint.x = sin(time);
 
+    if((time > 3) && (time < 6)){
+      setpoint.x = 1;
+    }else if((time > 6) && (time < 9)){
+      setpoint.x = 0;
+    }else{
+      setpoint.x = 0;
+    }
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.x, x.theta, u, setpoint.x);
 
     u = -1*(K.A*(x.x - setpoint.x) + K.B*(x.x_dot - setpoint.x_dot) + 
