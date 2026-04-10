@@ -4,6 +4,7 @@ project(inverted_pendulum VERSION 1.0.0)
 add_executable(inverted_pendulum 
   src/main.c
   core/physics.c
+  core/controller.c
 )
 
 target_include_directories(inverted_pendulum PRIVATE

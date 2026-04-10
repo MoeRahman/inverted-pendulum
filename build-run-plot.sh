@@ -1,4 +1,4 @@
-cmake --build build
+time cmake --build build
 ./build/inverted_pendulum
 
 gnuplot -p -e " set grid; 
@@ -7,7 +7,7 @@ gnuplot -p -e " set grid;
                 set border lc rgb 'white';
                 set key tc rgb 'white';
                 set object 1 rectangle from screen 0,0 to screen 1,1 fillcolor rgb 'black' behind;
-                plot 'data.csv' using 1:2 w l title 'X-Position', '' 
+                plot 'pendulum_sim.dat' using 1:2 w l title 'X-Position', '' 
                 using 1:3 w l title 'Pole Angle', '' 
                 using 1:5 w l title 'Position Setpoint'"
 
@@ -17,4 +17,4 @@ gnuplot -p -e " set grid;
                 set border lc rgb 'white';
                 set key tc rgb 'white';
                 set object 1 rectangle from screen 0,0 to screen 1,1 fillcolor rgb 'black' behind; 
-                plot 'data.csv' using 1:4 w l title 'Voltage'"
+                plot 'pendulum_sim.dat' using 1:4 w l title 'Voltage'"
