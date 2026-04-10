@@ -1,6 +1,8 @@
 # Project Overview:
 The simulation of the classic invertered pendulum controls problem. The hope is to increase complexity in the controller and system design to improve fidelity of the state-space model and design more sophisticated controllers around the model.
 
+If you have suggestions on what kind of control to implement, areas of research, code improvements, research papers to look at, hardware suggeestions, bug fixes, open problems in controls and inverted pendulums feel free contact me at muhtasim1023@gmail.com. Still trying to figure out github workflow so feel free to suggest tips on how to improve the repo.
+
 # Build Instructions
 In order to build the project you must have cmake installed. With cmake installed you can run the following commands:
 
