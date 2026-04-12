@@ -12,7 +12,7 @@ int main(){
       return 1;
   }
 
-  const double duration = 9;
+  const double duration = 15;
   double time = 0;
   double dt = 0.001;
 
@@ -33,9 +33,12 @@ int main(){
       setpoint.x = 1;
     }else if((time > 6) && (time < 9)){
       setpoint.x = 0;
-    }else{
+    }else if((time > 9) && (time < 12)){
+      setpoint.x = -1;
+    }else if((time > 12)){
       setpoint.x = 0;
     }
+    
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.x, x.theta, u, setpoint.x);
 
     u = -1*(K.A*(x.x - setpoint.x) + K.B*(x.x_dot - setpoint.x_dot) + 

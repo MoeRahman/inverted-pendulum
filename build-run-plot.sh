@@ -6,6 +6,7 @@ gnuplot -p -e " set grid;
                 set grid lc rgb 'white';
                 set border lc rgb 'white';
                 set key tc rgb 'white';
+                set terminal x11 0 title "Simulation" persist;
                 set object 1 rectangle from screen 0,0 to screen 1,1 fillcolor rgb 'black' behind;
                 plot 'pendulum_sim.dat' using 1:2 w l title 'X-Position', '' 
                 using 1:3 w l title 'Pole Angle', '' 
@@ -16,5 +17,6 @@ gnuplot -p -e " set grid;
                 set grid lc rgb 'white';
                 set border lc rgb 'white';
                 set key tc rgb 'white';
+                set terminal x11 0 title "Voltage" persist;
                 set object 1 rectangle from screen 0,0 to screen 1,1 fillcolor rgb 'black' behind; 
                 plot 'pendulum_sim.dat' using 1:4 w l title 'Voltage'"
