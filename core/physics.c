@@ -11,6 +11,11 @@ motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
 void pendulum_dynamics(const pendulum_state_t* curr_state, 
   pendulum_state_t* next_state, pendulum_params_t pendulum_params, double F){
 
+    if (curr_state == NULL || next_state == NULL) {
+        fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
+        return;
+    }
+
     //pendulum state variables
     const double x          = curr_state->x;
     const double x_dot      = curr_state->x_dot;
@@ -44,6 +49,11 @@ void pendulum_dynamics(const pendulum_state_t* curr_state,
 
 void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
   pendulum_params_t pendulum_parms, const double F, const double dt){
+
+    if (curr_state == NULL || next_state == NULL) {
+        fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
+        return;
+    }
 
     pendulum_state_t k1 = {0,0,0,0};
     pendulum_state_t k2 = {0,0,0,0};
