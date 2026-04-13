@@ -1,24 +1,24 @@
 #pragma once
 
 typedef struct{
-  const double g; //gravity
-  const double m; //ball mass
-  const double M; //cart mass
-  const double L; //pole length
+  const double g; //gravity     [m/s^2]
+  const double m; //ball mass   [kg]
+  const double M; //cart mass   [kg]
+  const double L; //pole length [m]
 }pendulum_params_t;
 
 typedef struct{
-  const double k1; //torque constant
-  const double k2; //back-emf constant
-  const double R;  //motor internal resistance
+  const double k1; //torque constant           [N*m/A]
+  const double k2; //back-emf constant         [V/kRPM]
+  const double R;  //motor internal resistance [Ω]
   const double r;  //torque to force ratio
 }motor_params_t;
 
 typedef struct{
-  double x;
-  double x_dot;
-  double theta;
-  double theta_dot;
+  double x;          //position         [m]
+  double x_dot;      //velocity         [m/s]
+  double theta;      //pole angle       [θ]
+  double theta_dot;  //angular velocity [ω]
 }pendulum_state_t;
 
 extern pendulum_params_t pendulum_params;
