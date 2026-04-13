@@ -1,8 +1,8 @@
 #pragma once
 
 typedef enum {
-  GENTLE, AGRESSIVE, OPTIMAL, 
-  GENTLE_DC, AGRESSIVE_DC, OPTIMAL_DC
+  GENTLE, AGGRESSIVE, OPTIMAL, 
+  GENTLE_DC, AGGRESSIVE_DC, OPTIMAL_DC
 }control_t;
 
 typedef struct{
