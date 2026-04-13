@@ -8,7 +8,7 @@ int main(){
   FILE *fpt = fopen("pendulum_sim.dat", "w");
 
   if (fpt == NULL) {
-      printf("Error opening file!\n");
+      fprintf(stderr, "Error opening file!\n");
       return 1;
   }
 
@@ -27,8 +27,6 @@ int main(){
 
   while(time < duration){
 
-    //setpoint.x = sin(time);
-
     if((time > 3) && (time < 6)){
       setpoint.x = 1;
     }else if((time > 6) && (time < 9)){
@@ -38,7 +36,7 @@ int main(){
     }else if((time > 12)){
       setpoint.x = 0;
     }
-    
+
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.x, x.theta, u, setpoint.x);
 
     u = -1*(K.A*(x.x - setpoint.x) + K.B*(x.x_dot - setpoint.x_dot) + 
