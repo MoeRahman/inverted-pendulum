@@ -472,3 +472,8 @@ Next steps might be to:
 ### April 9, 2026
 - Fixed a few migration bugs and stoped tracking C++ files
 - Hopes are that we can use these C files in embedded systems inverted pendulum
+
+### April 13, 2026
+- Updating minor bug fixes
+- Improving overall code quality and refactoring physics functions to remove repeating syntax
+
