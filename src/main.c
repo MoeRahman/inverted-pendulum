@@ -20,13 +20,14 @@ int main(){
 
   pendulum_state_t x = {0,0,0,0};
   gain_t K = {0,0,0,0};
-  gain_settings(OPTIMAL_DC, &K);
+  gain_settings(GENTLE, &K);
   double u = 0;
       
   pendulum_state_t setpoint = {0,0,0,0};
 
   while(time < duration){
 
+    //step function
     if((time > 3) && (time < 6)){
       setpoint.x = 1;
     }else if((time > 6) && (time < 9)){
