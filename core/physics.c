@@ -1,15 +1,17 @@
 #include "physics.h"
 #include <math.h>
+#include <stdio.h>
 /*
 - Non-linear dynamics model for the inverted pendulum and DC motor
 - ODE Solver
 */
 
-pendulum_params_t pendulum_params = {.g = 9.80665, .m = 0.1, .M = 1, .L = 0.5};
-motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
+const pendulum_params_t pendulum_params = {.g = 9.80665, .m = 0.1, .M = 1, .L = 0.5};
+const motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
 
 void pendulum_dynamics(const pendulum_state_t* curr_state, 
-  pendulum_state_t* next_state, pendulum_params_t pendulum_params, double F){
+                       pendulum_state_t* next_state, 
+                       const pendulum_params_t pendulum_params, const double F){
 
     if (curr_state == NULL || next_state == NULL) {
         fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
@@ -39,16 +41,28 @@ void pendulum_dynamics(const pendulum_state_t* curr_state,
     double a4 = (M + m)*g*sin_theta;
 
     //next state
-    next_state->x = x_dot;
-    next_state->x_dot = (a1 - a3)/a2;
-    next_state->theta = theta_dot;
-    next_state->theta_dot = (a4 - cos_theta*a1)/(L*a2);
+    *next_state = (pendulum_state_t){x_dot, (a1 - a3)/a2, theta_dot, (a4 - cos_theta*a1)/(L*a2)};
 
   }
 
+void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
+                                    pendulum_state_t* next_state, 
+                                    const pendulum_params_t pendulum_params,
+                                    const motor_params_t motor_params, const double Voltage){
+    
+    if (curr_state == NULL || next_state == NULL) {
+      fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
+      return;
+    }
+
+
+
+
+
+  }
 
 void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
-  pendulum_params_t pendulum_parms, const double F, const double dt){
+              pendulum_params_t pendulum_parms, const double F, const double dt){
 
     if (curr_state == NULL || next_state == NULL) {
         fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
