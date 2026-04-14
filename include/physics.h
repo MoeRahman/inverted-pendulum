@@ -1,11 +1,13 @@
 #pragma once
 
+
 typedef struct{
   const double g; //gravity     [m/s^2]
   const double m; //ball mass   [kg]
   const double M; //cart mass   [kg]
   const double L; //pole length [m]
 }pendulum_params_t;
+
 
 typedef struct{
   const double k1; //torque constant           [N*m/A]
@@ -14,18 +16,33 @@ typedef struct{
   const double r;  //torque to force ratio
 }motor_params_t;
 
+
 typedef struct{
-  double x;          //position         [m]
-  double x_dot;      //velocity         [m/s]
-  double theta;      //pole angle       [θ]
-  double theta_dot;  //angular velocity [ω]
+  double x;         //position         [m]
+  double x_dot;     //velocity         [m/s]
+  double theta;     //pole angle       [θ]
+  double theta_dot; //angular velocity [ω]
 }pendulum_state_t;
 
-extern pendulum_params_t pendulum_params;
-extern motor_params_t motor_params;
+
+extern const pendulum_params_t pendulum_params;
+extern const motor_params_t motor_params;
+
 
 void pendulum_dynamics(const pendulum_state_t* curr_state, 
-  pendulum_state_t* next_state, pendulum_params_t pendulum_params, double F);
+                       pendulum_state_t* next_state, 
+                       const pendulum_params_t pendulum_params, 
+                       const double Force);
 
-void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
-  pendulum_params_t pendulum_parms, const double F, const double dt);
+
+void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
+                                    pendulum_state_t* next_state, 
+                                    const pendulum_params_t pendulum_params,
+                                    const motor_params_t motor_params, 
+                                    const double Voltage);
+
+
+void rk4_step(const pendulum_state_t* curr_state, 
+              pendulum_state_t* next_state,
+              const pendulum_params_t pendulum_parms, 
+              const double F, const double dt);
