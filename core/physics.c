@@ -54,31 +54,6 @@ void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
       fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
       return;
     }
-
-    //pendulum state variables
-    const double x          = curr_state->x;
-    const double x_dot      = curr_state->x_dot;
-    const double theta      = curr_state->theta;
-    const double theta_dot  = curr_state->theta_dot;
-
-    //pendulum params
-    const double g = pendulum_params.g;
-    const double m = pendulum_params.m;
-    const double M = pendulum_params.M;
-    const double L = pendulum_params.L;
-
-    //trig ratios
-    const double sin_theta = sin(theta);
-    const double cos_theta = cos(theta);
-
-    //non-linear dynamics
-    double a1 = F + m*L*theta_dot*theta_dot*sin_theta;
-    double a2 = M + m*sin_theta*sin_theta;
-    double a3 = m*g*sin_theta*cos_theta;
-    double a4 = (M + m)*g*sin_theta;
-
-    //next state
-    *next_state = (pendulum_state_t){x_dot, (a1 - a3)/a2, theta_dot, (a4 - cos_theta*a1)/(L*a2)};
     
   }
 
