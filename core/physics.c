@@ -45,18 +45,6 @@ void pendulum_dynamics(const pendulum_state_t* curr_state,
 
   }
 
-void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
-                                    pendulum_state_t* next_state, 
-                                    const pendulum_params_t pendulum_params,
-                                    const motor_params_t motor_params, const double Voltage){
-    
-    if (curr_state == NULL || next_state == NULL) {
-      fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
-      return;
-    }
-    
-  }
-
 void rk4_step(const pendulum_state_t* curr_state, pendulum_state_t* next_state,
               pendulum_params_t pendulum_parms, const double F, const double dt){
 

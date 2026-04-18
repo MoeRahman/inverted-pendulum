@@ -39,7 +39,7 @@ void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
                                     pendulum_state_t* next_state, 
                                     const pendulum_params_t pendulum_params,
                                     const motor_params_t motor_params, 
-                                    const double Voltage);
+                                    const double voltage);
 
 
 void rk4_step(const pendulum_state_t* curr_state, 
