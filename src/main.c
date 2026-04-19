@@ -17,7 +17,7 @@ int main(){
   double time = 0;            // Units [sec]
   double dt = 0.01;           // Units [sec]
 
-  fprintf(fpt, "Time,Pos_X,Angle,Voltage,Setpoint\n");
+  fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint\n");
 
   state_t x = {0,0,0,0};
   double *K = NULL;
@@ -46,7 +46,7 @@ int main(){
     state_t next_state = {0,0,0,0};
     rk4_step(&x, &next_state, pendulum_params, u, dt);
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.pendulum.x, x.pendulum.theta, u, setpoint.pendulum.x);
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf\n", time, x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, setpoint.pendulum.x);
 
 
     x = next_state;
