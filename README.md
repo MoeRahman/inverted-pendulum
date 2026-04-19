@@ -477,3 +477,8 @@ Next steps might be to:
 - Updating minor bug fixes
 - Improving overall code quality and refactoring physics functions to remove repeating syntax
 
+### April 18, 2026
+- Removed code repetitions and removed repeating code
+- Moving forward we will be working on the estimation side of the inverted pendulum
+- Adding a simulated Encoder for measuring the pole angle with noise would be th next thing to do 
+
