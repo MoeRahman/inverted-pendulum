@@ -6,13 +6,15 @@
 - Swing-up energy controls
 */
 
-void gain_settings(control_t control_mode, gain_t* gain){
+void gain_settings(control_t control_mode, double **gain){
 
-  static const gain_t GAIN_TABLE[] = {
-    [GENTLE]        = {-35.838, -27.848, -108.259, -24.2240},
-    [AGGRESSIVE]    = {-224.90, -110.40, -322.490, -71.5010},
-    [OPTIMAL]       = {-10.000, -23.712, -237.411, -113.135}
+  static const double GAIN_TABLE[3][4] = {
+    {-35.838, -27.848, -108.259, -24.2240},
+    {-224.90, -110.40, -322.490, -71.5010},
+    {-10.000, -23.712, -237.411, -113.135}
   };
 
-  *gain = GAIN_TABLE[control_mode];
+  if((control_mode >= 0) && (control_mode < 3)){
+    *gain = GAIN_TABLE[control_mode];
+  }
 }

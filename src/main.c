@@ -20,7 +20,7 @@ int main(){
   fprintf(fpt, "Time,Pos_X,Angle,Voltage,Setpoint\n");
 
   state_t x = {0,0,0,0};
-  gain_t K = {0,0,0,0};
+  double *K = NULL;
   gain_settings(GENTLE, &K);
   double u = 0;
       
@@ -39,17 +39,18 @@ int main(){
       setpoint.pendulum.x = 0;
     }
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.pendulum.x, x.pendulum.theta, u, setpoint.pendulum.x);
-
-    u = -1*(K.A*(x.pendulum.x         - setpoint.pendulum.x) + 
-            K.B*(x.pendulum.x_dot     - setpoint.pendulum.x_dot) + 
-            K.C*(x.pendulum.theta     - setpoint.pendulum.theta) + 
-            K.D*(x.pendulum.theta_dot - setpoint.pendulum.theta_dot));
+    for(size_t i = 0; i < 4; ++i){
+      u -= K[i]*(x.arr[i] - setpoint.arr[i]);
+    }
 
     state_t next_state = {0,0,0,0};
     rk4_step(&x, &next_state, pendulum_params, u, dt);
-    x = next_state;
 
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.pendulum.x, x.pendulum.theta, u, setpoint.pendulum.x);
+
+
+    x = next_state;
+    u = 0;
     time += dt;
   }
 
