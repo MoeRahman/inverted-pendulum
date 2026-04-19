@@ -17,32 +17,30 @@ typedef struct{
 }motor_params_t;
 
 
-typedef struct{
-  double x;         //position         [m]
-  double x_dot;     //velocity         [m/s]
-  double theta;     //pole angle       [θ]
-  double theta_dot; //angular velocity [ω]
-}pendulum_state_t;
+typedef union{
+  double arr[4];
+
+  struct{
+    double x;         //position         [m]
+    double x_dot;     //velocity         [m/s]
+    double theta;     //pole angle       [θ]
+    double theta_dot; //angular velocity [ω]
+  }pendulum;
+
+}state_t;
 
 
 extern const pendulum_params_t pendulum_params;
 extern const motor_params_t motor_params;
 
 
-void pendulum_dynamics(const pendulum_state_t* curr_state, 
-                       pendulum_state_t* next_state, 
+void pendulum_dynamics(const state_t* curr_state, 
+                       state_t* next_state, 
                        const pendulum_params_t pendulum_params, 
                        const double Force);
 
 
-void motor_driven_pendulum_dynamics(const pendulum_state_t* curr_state,
-                                    pendulum_state_t* next_state, 
-                                    const pendulum_params_t pendulum_params,
-                                    const motor_params_t motor_params, 
-                                    const double voltage);
-
-
-void rk4_step(const pendulum_state_t* curr_state, 
-              pendulum_state_t* next_state,
+void rk4_step(const state_t* curr_state, 
+              state_t* next_state,
               const pendulum_params_t pendulum_parms, 
               const double F, const double dt);

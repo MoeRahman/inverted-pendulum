@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "estimator.h"
 #include "physics.h"
 #include <math.h>
 #include <stdio.h>
@@ -12,38 +13,40 @@ int main(){
       return 1;
   }
 
-  const double duration = 15;
-  double time = 0;
-  double dt = 0.001;
+  const double duration = 15; // Units [sec]
+  double time = 0;            // Units [sec]
+  double dt = 0.01;           // Units [sec]
 
   fprintf(fpt, "Time,Pos_X,Angle,Voltage,Setpoint\n");
 
-  pendulum_state_t x = {0,0,0,0};
+  state_t x = {0,0,0,0};
   gain_t K = {0,0,0,0};
   gain_settings(GENTLE, &K);
   double u = 0;
       
-  pendulum_state_t setpoint = {0,0,0,0};
+  state_t setpoint = {0,0,0,0};
 
   while(time < duration){
 
     //step function
     if((time > 3) && (time < 6)){
-      setpoint.x = 1;
+      setpoint.pendulum.x = 1;
     }else if((time > 6) && (time < 9)){
-      setpoint.x = 0;
+      setpoint.pendulum.x = 0;
     }else if((time > 9) && (time < 12)){
-      setpoint.x = -1;
+      setpoint.pendulum.x = -1;
     }else if((time > 12)){
-      setpoint.x = 0;
+      setpoint.pendulum.x = 0;
     }
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.x, x.theta, u, setpoint.x);
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", time, x.pendulum.x, x.pendulum.theta, u, setpoint.pendulum.x);
 
-    u = -1*(K.A*(x.x - setpoint.x) + K.B*(x.x_dot - setpoint.x_dot) + 
-            K.C*(x.theta - setpoint.theta) + K.D*(x.theta_dot - setpoint.theta_dot));
+    u = -1*(K.A*(x.pendulum.x         - setpoint.pendulum.x) + 
+            K.B*(x.pendulum.x_dot     - setpoint.pendulum.x_dot) + 
+            K.C*(x.pendulum.theta     - setpoint.pendulum.theta) + 
+            K.D*(x.pendulum.theta_dot - setpoint.pendulum.theta_dot));
 
-    pendulum_state_t next_state = {0,0,0,0};
+    state_t next_state = {0,0,0,0};
     rk4_step(&x, &next_state, pendulum_params, u, dt);
     x = next_state;
 
