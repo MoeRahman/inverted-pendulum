@@ -64,19 +64,14 @@ void rk4_step(const state_t* curr_state,
 
     state_t state = *curr_state;
 
-    pendulum_dynamics(&state, &k1, pendulum_params, F);
-    for(size_t i = 0; i < 4; ++i){
-      state.arr[i] = curr_state->arr[i] + 0.5*dt*k1.arr[i];
-    }
+    state_t *k[] = {&k1, &k2, &k3};
 
-    pendulum_dynamics(&state, &k2, pendulum_params, F);
-    for(size_t i = 0; i < 4; ++i){
-      state.arr[i] = curr_state->arr[i] + 0.5*dt*k2.arr[i];
-    }
-
-    pendulum_dynamics(&state, &k3, pendulum_params, F);
-    for(size_t i = 0; i < 4; ++i){
-      state.arr[i] = curr_state->arr[i] + 0.5*dt*k3.arr[i];
+    for(size_t j = 0; j < 3; ++j){
+      pendulum_dynamics(&state, k[j], pendulum_params, F);
+      
+      for(size_t i = 0; i < 4; ++i){
+        state.arr[i] = curr_state->arr[i] + 0.5*dt*(k[j]->arr[i]);
+      }
     }
 
     pendulum_dynamics(&state, &k4, pendulum_params, F);
