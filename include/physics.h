@@ -34,13 +34,13 @@ extern const pendulum_params_t pendulum_params;
 extern const motor_params_t motor_params;
 
 
-void pendulum_dynamics(const state_t* curr_state, 
-                       state_t* next_state, 
+void pendulum_dynamics(state_t const *curr_state, 
+                       state_t  *next_state, 
                        const pendulum_params_t pendulum_params, 
                        const double Force);
 
 
-void rk4_step(const state_t* curr_state, 
+void rk4_step(state_t const *curr_state, 
               state_t* next_state,
               const pendulum_params_t pendulum_parms, 
               const double F, const double dt);

@@ -9,7 +9,7 @@
 const pendulum_params_t pendulum_params = {.g = 9.80665, .m = 0.1, .M = 1, .L = 0.5};
 const motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
 
-void pendulum_dynamics(const state_t* curr_state, 
+void pendulum_dynamics(state_t const *curr_state, 
                        state_t* next_state, 
                        const pendulum_params_t pendulum_params, 
                        const double F){
@@ -46,7 +46,7 @@ void pendulum_dynamics(const state_t* curr_state,
 
   }
 
-void rk4_step(const state_t* curr_state, 
+void rk4_step(state_t const *curr_state, 
               state_t* next_state,
               pendulum_params_t pendulum_parms, 
               const double F, 
