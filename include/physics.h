@@ -1,5 +1,8 @@
 #pragma once
 
+#include <math.h>
+#include <time.h>
+
 
 typedef struct{
   const double g; //gravity     [m/s^2]
@@ -44,3 +47,6 @@ void rk4_step(state_t const *curr_state,
               state_t* next_state,
               const pendulum_params_t pendulum_parms, 
               const double F, const double dt);
+
+
+double gaussian_generator(double mean, double std_dev);

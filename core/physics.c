@@ -1,9 +1,7 @@
 
 #include "physics.h"
-#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -17,13 +15,11 @@
 const pendulum_params_t pendulum_params = {.g = 9.80665, .m = 0.1, .M = 1, .L = 0.5};
 const motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
 
-double guassian_generator(double mean, double std_dev){
-
-  srand(time(NULL));
+double gaussian_generator(double mean, double std_dev){
 
   // Generate two uniform random numbers between 0 and 1
-  double u1 = (double)rand() / RAND_MAX;
-  double u2 = (double)rand() / RAND_MAX;
+  double u1 = ((double)rand() + 1.0) / ((double)RAND_MAX + 2.0); 
+  double u2 = ((double)rand() + 1.0) / ((double)RAND_MAX + 2.0);
 
   // Box-Muller Transform
   double z0 = sqrt(-2.0 * log(u1)) * cos(2.0 * M_PI * u2);
@@ -42,17 +38,11 @@ void pendulum_dynamics(state_t const *curr_state,
         return;
     }
 
-    //Gaussian Noise 
-    const double x1_noise = guassian_generator(0, 0.25);
-    const double x2_noise = guassian_generator(0, 0.025);
-    const double x3_noise = guassian_generator(0, 0.004);
-    const double x4_noise = guassian_generator(0, 0.0001);
-
     //pendulum state variables
-    const double x          = x1_noise + curr_state->pendulum.x;
-    const double x_dot      = x2_noise + curr_state->pendulum.x_dot;
-    const double theta      = x3_noise + curr_state->pendulum.theta;
-    const double theta_dot  = x4_noise + curr_state->pendulum.theta_dot;
+    const double x          = curr_state->pendulum.x;
+    const double x_dot      = curr_state->pendulum.x_dot;
+    const double theta      = curr_state->pendulum.theta;
+    const double theta_dot  = curr_state->pendulum.theta_dot;
 
     //pendulum params
     const double g = pendulum_params.g;
