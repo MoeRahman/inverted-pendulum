@@ -4,4 +4,8 @@
 - Kalman Filter
 */
 
+double angular_encoder_sensor(double theta_measurement){
+    
+}
+
 
