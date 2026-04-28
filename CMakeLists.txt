@@ -5,6 +5,7 @@ add_executable(inverted_pendulum
   src/main.c
   core/physics.c
   core/controller.c
+  core/estimator.c
 )
 
 target_include_directories(inverted_pendulum PRIVATE
