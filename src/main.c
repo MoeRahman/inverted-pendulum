@@ -5,8 +5,8 @@
 #include <stdio.h>
 
 
-#define MAX_FORCE 100
-#define MIN_FORCE -100
+#define MAX_FORCE 12
+#define MIN_FORCE -12
 
 int main(){
 
@@ -31,6 +31,7 @@ int main(){
 
   //Declare and Initialize state variables, Gain vector, and input force
   state_t x = {0,0,0,0};
+  state_t y = {0,0,0,0};
   double *K = NULL;
   gain_settings(GENTLE, &K);
   double u = 0;
@@ -40,10 +41,10 @@ int main(){
 
   while(time < 10){
 
-    state_t noise = {gaussian_generator(0, 0.01),   //State Process Noise
+    state_t noise = {gaussian_generator(0, 0.0001),   //State Process Noise
+                     gaussian_generator(0, 0.0005),   //State Process Noise
                      gaussian_generator(0, 0.005),   //State Process Noise
-                     gaussian_generator(0, 0.02),   //State Process Noise
-                     gaussian_generator(0, 0.001)};  //State Process Noise
+                     gaussian_generator(0, 0.00025)};  //State Process Noise
 
     //x-position setpoint follows sinewave
     //setpoint.pendulum.x = 0.5*sin((k)*time);
