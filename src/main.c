@@ -5,9 +5,6 @@
 #include <stdio.h>
 
 
-#define MAX_FORCE 12
-#define MIN_FORCE -12
-
 int main(){
 
   //Generate seed for Guassian noise generation
@@ -23,18 +20,17 @@ int main(){
   }
 
   //Time elapsed variable and time step
-  double time = 0;            // Units [sec]
-  double dt = 0.01;           // Units [sec]
+  double time = 0;            //Units [sec]
+  double dt = 0.01;           //Units [sec]
 
   //Write column titles
   fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint\n");
 
-  //Declare and Initialize state variables, Gain vector, and input force
-  state_t x = {0,0,0,0};
-  state_t y = {0,0,0,0};
-  double *K = NULL;
-  gain_settings(GENTLE, &K);
-  double u = 0;
+  state_t x = {0,0,0,0};                    //State Vector {x_pos, x_vel, theta, angular_velocity}
+  state_t x_est = {0,0,0,0};                //State Estimation Vector
+  state_t y = {0,0,0,0};                    //Measurement Vector
+  const double *K = gain_settings(GENTLE);  //Gain Vector
+  double u = 0;                             //Input force 
   
   //Initial Setpoints for each state
   state_t setpoint = {0,0,0,0};
@@ -42,12 +38,10 @@ int main(){
   while(time < 10){
 
     state_t noise = {gaussian_generator(0, 0.0001),   //State Process Noise
-                     gaussian_generator(0, 0.0005),   //State Process Noise
-                     gaussian_generator(0, 0.005),   //State Process Noise
-                     gaussian_generator(0, 0.00025)};  //State Process Noise
+                     gaussian_generator(0, 0.00005),   //State Process Noise
+                     gaussian_generator(0, 0.0005),    //State Process Noise
+                     gaussian_generator(0, 0.00005)};  //State Process Noise
 
-    //x-position setpoint follows sinewave
-    //setpoint.pendulum.x = 0.5*sin((k)*time);
     if(time > 5) setpoint.pendulum.x = 1;
 
     for(size_t i = 0; i < 4; ++i){
@@ -55,14 +49,11 @@ int main(){
       u -= K[i]*(x.arr[i] - setpoint.arr[i]);
     }
 
-    u = ((u>MAX_FORCE) ? MAX_FORCE : (u<MIN_FORCE) ? MIN_FORCE : u);
-
     state_t next_state = {0,0,0,0};
     rk4_step(&x, &next_state, pendulum_params, u, dt);
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
       x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, setpoint.pendulum.x);
-
 
     x = next_state;
     u = 0;
