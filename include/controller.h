@@ -5,4 +5,4 @@ typedef enum {
   GENTLE_DC, AGGRESSIVE_DC, OPTIMAL_DC
 }control_t;
 
-void gain_settings(control_t control_mode, double **gain);
+const double *gain_settings(control_t control_mode);
