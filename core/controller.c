@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "stdio.h"
 /*
 - PID Controller
 - Pole Placement + Full State Feedback
@@ -6,7 +7,7 @@
 - Swing-up energy controls
 */
 
-void gain_settings(control_t control_mode, double **gain){
+const double *gain_settings(control_t control_mode){
 
   static const double GAIN_TABLE[3][4] = {
     {-35.838, -27.848, -108.259, -24.2240},
@@ -15,6 +16,8 @@ void gain_settings(control_t control_mode, double **gain){
   };
 
   if((control_mode >= 0) && (control_mode < 3)){
-    *gain = GAIN_TABLE[control_mode];
+    return GAIN_TABLE[control_mode];
+  }else{
+    return NULL;
   }
 }
