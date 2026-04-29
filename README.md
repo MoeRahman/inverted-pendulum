@@ -482,3 +482,50 @@ Next steps might be to:
 - Moving forward we will be working on the estimation side of the inverted pendulum
 - Adding a simulated Encoder for measuring the pole angle with noise would be th next thing to do 
 
+### April 29, 2026
+Ok looks like I forgot to add damping to the cart motion and the pole motion so now might be a good time to add that: 
+
+### Inverted Pendulum with Damping
+Ok we now need to improve the model we use by added damping to the system. Damping in our system come in two forms first is the linear viscous friction for the cart's velocity, *b*, and the rotational viscous dampening in the pole's angle, *$\gamma$*.
+
+**The Nonlinear Equation of Motion:**
+$$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F - b\dot x$$
+
+$$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = -\gamma\dot\theta$$
+Now we can solve these implicitly for $\ddot x$ and $\ddot\theta$ via matrix inversion just as we did before.
+
+**Explicit solution to $\ddot x$ and $\ddot\theta$:**
+
+$$
+\begin{bmatrix}
+(M+m) & mL\cos\theta\\
+\cos\theta & L
+\end{bmatrix}
+\begin{bmatrix}
+\ddot x\\
+\ddot\theta
+\end{bmatrix}
+= 
+\begin{bmatrix}
+F - b\dot x + mL\dot\theta^2\sin\theta\\
+g\sin\theta - \frac{\gamma}{mL}\dot\theta
+\end{bmatrix}
+$$
+
+Thus the explicit solution for $\ddot x$ and $\ddot\theta$ :
+
+$$
+\begin{bmatrix}
+\ddot x\\
+\ddot\theta
+\end{bmatrix}
+= 
+\frac{1}{L(M+m\sin^2\theta)} \begin{bmatrix} L & -mL\cos\theta\\ -\cos\theta & (M+m) \end{bmatrix}
+\begin{bmatrix}
+F - b\dot x + mL\dot\theta^2\sin\theta\\
+g\sin\theta - \frac{\gamma}{mL}\dot\theta
+\end{bmatrix}
+$$
+
+$$\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}$$
+$$\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
