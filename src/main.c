@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define POS_NOISE   1e-4
+#define VEL_NOISE   1e-3
+#define ANGLE_NOISE 1e-5
+#define OMEGA_NOISE 1e-4
 
 int main(){
 
@@ -28,34 +32,39 @@ int main(){
 
   state_t x = {0,0,0,0};                    //State Vector {x_pos, x_vel, theta, angular_velocity}
   state_t x_est = {0,0,0,0};                //State Estimation Vector
+  state_t next_state = {0,0,0,0};
   state_t y = {0,0,0,0};                    //Measurement Vector
   const double *K = gain_settings(GENTLE);  //Gain Vector
   double u = 0;                             //Input force 
+
+  //State Process Noise
+  state_t noise = {0,0,0,0};
+  double noise_std_dev[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
   
   //Initial Setpoints for each state
   state_t setpoint = {0,0,0,0};
 
   while(time < 10){
 
-    state_t noise = {gaussian_generator(0, 0.0001),   //State Process Noise
-                     gaussian_generator(0, 0.00005),   //State Process Noise
-                     gaussian_generator(0, 0.0005),    //State Process Noise
-                     gaussian_generator(0, 0.00005)};  //State Process Noise
+    for(size_t i = 0; i < 4; ++i){
+      noise.arr[i] = gaussian_generator(0, noise_std_dev[i]);
+    }       
 
     if(time > 5) setpoint.pendulum.x = 1;
 
     for(size_t i = 0; i < 4; ++i){
-      x.arr[i] = x.arr[i] + noise.arr[i]; // Add process noise to current state
+      //Add process noise to current state
+      x.arr[i] = x.arr[i] + noise.arr[i];
       u -= K[i]*(x.arr[i] - setpoint.arr[i]);
     }
 
-    state_t next_state = {0,0,0,0};
     rk4_step(&x, &next_state, pendulum_params, u, dt);
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
       x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, setpoint.pendulum.x);
 
     x = next_state;
+    next_state = (state_t){0,0,0,0};
     u = 0;
     time += dt;
   }
