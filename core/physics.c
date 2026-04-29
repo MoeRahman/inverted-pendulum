@@ -50,7 +50,7 @@ void pendulum_dynamics(state_t const *curr_state,
     const double M = pendulum_params.M;
     const double L = pendulum_params.L;
 
-    //trig ratios
+    //trig ratios [angle in radians]
     const double sin_theta = sin(theta);
     const double cos_theta = cos(theta);
 

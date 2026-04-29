@@ -26,8 +26,8 @@ typedef union{
   struct{
     double x;         //position         [m]
     double x_dot;     //velocity         [m/s]
-    double theta;     //pole angle       [θ]
-    double theta_dot; //angular velocity [ω]
+    double theta;     //pole angle       [rad]
+    double theta_dot; //angular velocity [rad/s]
   }pendulum;
 
 }state_t;
