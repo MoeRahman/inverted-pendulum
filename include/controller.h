@@ -1,8 +1,7 @@
 #pragma once
 
 typedef enum {
-  GENTLE, AGGRESSIVE, OPTIMAL, 
-  GENTLE_DC, AGGRESSIVE_DC, OPTIMAL_DC
+  K1, K2, K3, K4, K5, K6
 }control_t;
 
 const double *gain_settings(control_t control_mode);
