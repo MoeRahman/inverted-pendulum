@@ -1,13 +1,22 @@
 #include "controller.h"
 #include "estimator.h"
 #include "physics.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #define POS_NOISE   1e-4
 #define VEL_NOISE   1e-3
 #define ANGLE_NOISE 1e-5
 #define OMEGA_NOISE 1e-4
+
+#define ENABLE_DAMPING true
+#define DISABLE_DAMPING false
+
+#define SIM_TIME 4.5
 
 int main(){
 
@@ -42,23 +51,23 @@ int main(){
   double noise_std_dev[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
   
   //Initial Setpoints for each state
-  state_t setpoint = {0,0,0,0};
+  state_t setpoint = {0,0,1e-3,0};
 
-  while(time < 10){
+  while(time < SIM_TIME){
 
     for(size_t i = 0; i < 4; ++i){
       noise.arr[i] = gaussian_generator(0, noise_std_dev[i]);
     }       
 
-    if(time > 5) setpoint.pendulum.x = 1;
+    if(time > 5){setpoint.pendulum.x = 1;}
 
     for(size_t i = 0; i < 4; ++i){
       //Add process noise to current state
-      x.arr[i] = x.arr[i] + noise.arr[i];
+      //x.arr[i] = x.arr[i] + noise.arr[i];
       u -= K[i]*(x.arr[i] - setpoint.arr[i]);
     }
 
-    rk4_step(&x, &next_state, pendulum_params, u, dt);
+    rk4_step(&x, &next_state, pendulum_params, u, dt, false);
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
       x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, setpoint.pendulum.x);
