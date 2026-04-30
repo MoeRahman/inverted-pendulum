@@ -531,3 +531,20 @@ $$\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\c
 $$\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
 
 But the issue we have now is that the system dynamics are different, and thus we need to calculate new optimal gains for this new system with damping.
+
+### April 30, 2026
+
+State-Space System for an Inverted Pendulum with damping:
+
+$$
+\dot x = 
+\begin{bmatrix} 
+0&1&0&0\\
+0&-\frac{b}{M}&-\frac{mg}{M}&\frac{\gamma}{M}\\
+0&0&0&1\\
+0&\frac{b}{ML}&\frac{(M+m)g}{ML}&-\frac{\gamma(M+m)}{mML^2}
+\end{bmatrix}x~+~
+\begin{bmatrix}
+0\\\frac{1}{M}\\0\\-\frac{1}{ML}
+\end{bmatrix}u
+$$
