@@ -529,3 +529,5 @@ $$
 
 $$\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}$$
 $$\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
+
+But the issue we have now is that the system dynamics are different, and thus we need to calculate new optimal gains for this new system with damping.

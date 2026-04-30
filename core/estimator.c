@@ -5,7 +5,7 @@
 */
 
 double angular_encoder_sensor(double theta_measurement){
-    
+    return 0;
 }
 
 
