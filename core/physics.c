@@ -12,7 +12,7 @@
 - ODE Solver
 */
 
-const pendulum_params_t pendulum_params = {.G = 9.80665, .m = 10, .M = 1, .L = 0.5, .b = 1, .g = 1e-4};
+const pendulum_params_t pendulum_params = {.G = 9.80665, .m = 10, .M = 20, .L = 0.5, .b = 2, .g = 1};
 const motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
 
 double gaussian_generator(double mean, double std_dev){
@@ -87,14 +87,14 @@ void rk4_step(state_t const *curr_state, state_t* next_state,
     state_t *k[] = {&k1, &k2, &k3};
 
     for(size_t j = 0; j < 3; ++j){
-      pendulum_dynamics(&state, k[j], pendulum_params, F, true);
+      pendulum_dynamics(&state, k[j], pendulum_params, F, enable_damping);
       
       for(size_t i = 0; i < 4; ++i){
         state.arr[i] = curr_state->arr[i] + 0.5*dt*(k[j]->arr[i]);
       }
     }
 
-    pendulum_dynamics(&state, &k4, pendulum_params, F, true);
+    pendulum_dynamics(&state, &k4, pendulum_params, F, enable_damping);
     for(size_t i = 0; i < 4; ++i){
       next_state->arr[i] = curr_state->arr[i] + 
       (dt/6.0)*(k1.arr[i] + 2.0*k2.arr[i] + 2.0*k3.arr[i] + k4.arr[i]);
