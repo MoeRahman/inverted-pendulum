@@ -16,7 +16,7 @@
 #define ENABLE_DAMPING true
 #define DISABLE_DAMPING false
 
-#define SIM_TIME 4.5
+#define SIM_TIME 10
 
 int main(){
 
@@ -37,13 +37,13 @@ int main(){
   double dt = 0.01;           //Units [sec]
 
   //Write column titles
-  fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint\n");
+  fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint,ERROR\n");
 
   state_t x = {0,0,0,0};                    //State Vector {x_pos, x_vel, theta, angular_velocity}
   state_t x_est = {0,0,0,0};                //State Estimation Vector
   state_t next_state = {0,0,0,0};
   state_t y = {0,0,0,0};                    //Measurement Vector
-  const double *K = gain_settings(GENTLE);  //Gain Vector
+  const double *K = gain_settings(K2);  //Gain Vector
   double u = 0;                             //Input force 
 
   //State Process Noise
@@ -63,14 +63,15 @@ int main(){
 
     for(size_t i = 0; i < 4; ++i){
       //Add process noise to current state
-      //x.arr[i] = x.arr[i] + noise.arr[i];
+      x.arr[i] = x.arr[i] + noise.arr[i];
       u -= K[i]*(x.arr[i] - setpoint.arr[i]);
     }
 
-    rk4_step(&x, &next_state, pendulum_params, u, dt, false);
+    rk4_step(&x, &next_state, pendulum_params, u, dt, true);
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
-      x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, setpoint.pendulum.x);
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
+      x.pendulum.x, x.pendulum.x_dot, x.pendulum.theta, u, 
+      setpoint.pendulum.x, setpoint.pendulum.x - x.pendulum.x);
 
     x = next_state;
     next_state = (state_t){0,0,0,0};
