@@ -39,7 +39,7 @@ int main(){
   //Write column titles
   fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint,ERROR\n");
 
-  state_t x = {0,0,0,0};                    //State Vector {x_pos, x_vel, theta, angular_velocity}
+  state_t x = {0,0,-1e-3,0};                    //State Vector {x_pos, x_vel, theta, angular_velocity}
   state_t x_est = {0,0,0,0};                //State Estimation Vector
   state_t next_state = {0,0,0,0};
   state_t y = {0,0,0,0};                    //Measurement Vector
@@ -51,7 +51,7 @@ int main(){
   double noise_std_dev[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
   
   //Initial Setpoints for each state
-  state_t setpoint = {0,0,1e-3,0};
+  state_t setpoint = {0,0,0,0};
 
   while(time < SIM_TIME){
 
@@ -59,7 +59,11 @@ int main(){
       noise.arr[i] = gaussian_generator(0, noise_std_dev[i]);
     }       
 
-    if(time > 5){setpoint.pendulum.x = 0.1;}
+    if((time >= 2) && (time < 4)){setpoint.pendulum.x = -1.5;}
+    if((time >= 4) && (time < 6)){setpoint.pendulum.x =  0.0;}
+    if((time >= 6) && (time < 8)){setpoint.pendulum.x =  1.5;}
+    if((time >= 8) && (time < 10)){setpoint.pendulum.x = 0.0;}
+    //setpoint.pendulum.x += dt;
 
     for(size_t i = 0; i < 4; ++i){
       //Add process noise to current state
