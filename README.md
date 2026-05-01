@@ -24,10 +24,13 @@ Run the following bash script: `./plot.sh`
 
 Example Output:
 
-<img src="simulation.png" width="45%" /> <img src="force.png" width="45%" />
-<img src="velocity.png" width="45%" /> <img src="error.png" width="45%" />
+<div align="center">
+    <img src="simulation.png" width="45%" /><img src="force.png" width="45%" />
+</div>
 
-
+<div align="center">
+    <img src="velocity.png" width="45%" /> <img src="error.png" width="45%" />
+</div>
 
 ## Tentitive Plan:
 
