@@ -26,7 +26,8 @@ Finally we can plot the graphs. First with the X-Position of the cart and the po
 
 Example Output:
 
-<img src="position_angle.png" width="45%" /> <img src="voltage.png" width="45%" />
+<img src="simulation.png" width="45%" /> <img src="force.png" width="45%" />
+<img src="velocity.png" width="45%" /> <img src="error.png" width="45%" />
 
 
 
