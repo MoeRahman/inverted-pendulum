@@ -59,7 +59,7 @@ int main(){
       noise.arr[i] = gaussian_generator(0, noise_std_dev[i]);
     }       
 
-    if(time > 5){setpoint.pendulum.x = 1;}
+    if(time > 5){setpoint.pendulum.x = 0.1;}
 
     for(size_t i = 0; i < 4; ++i){
       //Add process noise to current state
