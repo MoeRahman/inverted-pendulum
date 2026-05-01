@@ -542,19 +542,23 @@ State-Space System for an Inverted Pendulum with damping:
 $$
 \dot x = 
 \begin{bmatrix} 
-0&1&0&0\\
-0&-\frac{b}{M}&-\frac{mg}{M}&\frac{\gamma}{M}\\
-0&0&0&1\\
-0&\frac{b}{ML}&\frac{(M+m)g}{ML}&-\frac{\gamma(M+m)}{mML^2}
+0 & 1 & 0 & 0 \\
+0 & -\frac{b}{M} & -\frac{mg}{M} & \frac{\gamma}{M} \\
+0 & 0 & 0 & 1 \\
+0 & \frac{b}{ML} & \frac{(M+m)g}{ML} & -\frac{\gamma(M+m)}{mML^2}
 \end{bmatrix}x~+~
 \begin{bmatrix}
-0\\\frac{1}{M}\\0\\-\frac{1}{ML}
+0 \\ \frac{1}{M} \\ 0 \\ -\frac{1}{ML}
 \end{bmatrix}u
 $$
 
 $$
-A = \left[\begin{matrix}0 & 1.0 & 0 & 0\\0 & -0.1 & -4.903325 & 0.05\\0 & 0 & 0 & 1.0\\0 & 0.2 & 29.41995 & -0.6\end{matrix}\right]
-B = \left[\begin{matrix}0\\0.05\\0\\-0.1\end{matrix}\right]
+A = \left[\begin{matrix}0 & 1.0 & 0 & 0 \\ 
+                        0 & -0.1 & -4.903325 & 0.05 \\ 
+                        0 & 0 & 0 & 1.0 \\ 
+                        0 & 0.2 & 29.41995 & -0.6 \end{matrix}\right]
+
+B = \left[\begin{matrix}0 \\ 0.05 \\ 0 \\ -0.1 \end{matrix}\right]
 $$
 
 Given the above system we can set up a Q and R matrix to pick the optimal gain matrix K by minimizing the cost function $Qx^2 + Ru^2$. Q and R can be initially approximated using Bryson's Rule:
@@ -568,6 +572,10 @@ $$
 Given the max acceptable value for x (0.1m), theta (20deg), Force(100N)
 
 $$
-Q = \left[\begin{matrix}100 & 0 & 0 & 0\\0 & 1 & 0 & 0\\ 0 & 0 & 8.2 & 0\\0 & 0 & 0 & 1\end{matrix}\right]
+Q = \left[\begin{matrix}100 & 0 & 0 & 0   \\ 
+                          0 & 1 & 0 & 0   \\ 
+                          0 & 0 & 8.2 & 0 \\ 
+                          0 & 0 & 0 & 1 \end{matrix}\right]
+
 R = 0.0001;
 $$
