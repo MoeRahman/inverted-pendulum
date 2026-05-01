@@ -491,25 +491,16 @@ Ok we now need to improve the model we use by added damping to the system. Dampi
 
 **The Nonlinear Equation of Motion:**
 
-$$
+$$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F - b\dot x$$
 
-\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F - b\dot x
-
-$$
-
-$$
-
-mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = -\gamma\dot\theta
-
-$$
+$$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = -\gamma\dot\theta$$
 
 
 Now we can solve these implicitly for $\ddot x$ and $\ddot\theta$ via matrix inversion just as we did before.
 
-**Explicit solution to $\ddot x$ and $\ddot\theta$:**
+**Explicit solution to $ \ddot x$ and $\ddot\theta $:**
 
 $$
-
 \begin{bmatrix}
 (M+m) & mL\cos\theta\\
 \cos\theta & L
@@ -523,14 +514,11 @@ $$
 F - b\dot x + mL\dot\theta^2\sin\theta\\
 g\sin\theta - \frac{\gamma}{mL}\dot\theta
 \end{bmatrix}
-
 $$
 
 Thus the explicit solution for $\ddot x$ and $\ddot\theta$ :
 
 $$
-
-
 \begin{bmatrix}
 \ddot x\\
 \ddot\theta
@@ -541,22 +529,11 @@ $$
 F - b\dot x + mL\dot\theta^2\sin\theta\\
 g\sin\theta - \frac{\gamma}{mL}\dot\theta
 \end{bmatrix}
-
-
 $$
 
-$$
+$$\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}$$
 
-\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}
-
-$$
-
-
-$$
-
-\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}
-
-$$
+$$\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
 
 But the issue we have now is that the system dynamics are different, and thus we need to calculate new optimal gains for this new system with damping.
 
@@ -565,8 +542,6 @@ But the issue we have now is that the system dynamics are different, and thus we
 State-Space System for an Inverted Pendulum with damping:
 
 $$
-
-
 \dot x = 
 \begin{bmatrix} 
 0 & 1 & 0 & 0 \\
@@ -583,6 +558,7 @@ $$
 \end{bmatrix}u
 $$
 
+<<<<<<< HEAD
 $$
 A = \left[\begin{matrix}0 & 1.0 & 0 & 0 \\ 
                         0 & -0.1 & -4.903325 & 0.05 \\ 
@@ -591,6 +567,10 @@ A = \left[\begin{matrix}0 & 1.0 & 0 & 0 \\
 
 B = \left[\begin{matrix}0 \\ 0.05 \\ 0 \\ -0.1 \end{matrix}\right]
 $$
+=======
+$$A = \left[\begin{matrix}0 & 1.0 & 0 & 0\\0 & -0.1 & -4.903325 & 0.05\\0 & 0 & 0 & 1.0\\0 & 0.2 & 29.41995 & -0.6\end{matrix}\right]
+B = \left[\begin{matrix}0\\0.05\\0\\-0.1\end{matrix}\right]$$
+>>>>>>> dev
 
 Given the above system we can set up a Q and R matrix to pick the optimal gain matrix K by minimizing the cost function $Qx^2 + Ru^2$. Q and R can be initially approximated using Bryson's Rule:
 
@@ -602,6 +582,7 @@ $$
 
 Given the max acceptable value for x (0.1m), theta (20deg), Force(100N)
 
+<<<<<<< HEAD
 $$
 <<<<<<< HEAD
 Q = \left[\begin{matrix}100 & 0 & 0 & 0   \\ 
@@ -616,3 +597,7 @@ Q = \left[\begin{matrix}100 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 8.2 & 0 \\ 0
 R = 0.0001;
 
 $$
+=======
+$$Q = \left[\begin{matrix}100 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 8.2 & 0 \\ 0 & 0 & 0 & 1\end{matrix}\right]
+R = 0.0001;$$
+>>>>>>> dev
