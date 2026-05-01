@@ -490,14 +490,26 @@ Ok looks like I forgot to add damping to the cart motion and the pole motion so 
 Ok we now need to improve the model we use by added damping to the system. Damping in our system come in two forms first is the linear viscous friction for the cart's velocity, *b*, and the rotational viscous dampening in the pole's angle, *$\gamma$*.
 
 **The Nonlinear Equation of Motion:**
-$$\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F - b\dot x$$
 
-$$mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = -\gamma\dot\theta$$
+$$
+
+\left(M + m \right)\ddot x + mL\ddot\theta\cos(\theta) - mL\dot\theta^2\sin(\theta) = F - b\dot x
+
+$$
+
+$$
+
+mL\ddot x\cos(\theta) + mL^2\ddot\theta - mgL\sin(\theta) = -\gamma\dot\theta
+
+$$
+
+
 Now we can solve these implicitly for $\ddot x$ and $\ddot\theta$ via matrix inversion just as we did before.
 
 **Explicit solution to $\ddot x$ and $\ddot\theta$:**
 
 $$
+
 \begin{bmatrix}
 (M+m) & mL\cos\theta\\
 \cos\theta & L
@@ -511,11 +523,14 @@ $$
 F - b\dot x + mL\dot\theta^2\sin\theta\\
 g\sin\theta - \frac{\gamma}{mL}\dot\theta
 \end{bmatrix}
+
 $$
 
 Thus the explicit solution for $\ddot x$ and $\ddot\theta$ :
 
 $$
+
+
 \begin{bmatrix}
 \ddot x\\
 \ddot\theta
@@ -526,10 +541,22 @@ $$
 F - b\dot x + mL\dot\theta^2\sin\theta\\
 g\sin\theta - \frac{\gamma}{mL}\dot\theta
 \end{bmatrix}
+
+
 $$
 
-$$\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}$$
-$$\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}$$
+$$
+
+\boxed{\ddot x = \frac{F - b\dot x + mL\dot\theta^2\sin\theta - mg\sin\theta\cos\theta + \frac{\gamma}{L}\dot\theta\cos\theta}{M + m\sin^2\theta}}
+
+$$
+
+
+$$
+
+\boxed{\ddot\theta = \frac{(M+m)(g\sin\theta - \frac{\gamma}{mL}\dot\theta)- \cos\theta(F - b\dot x + mL\dot\theta^2\sin\theta)}{L(M+m\sin^2\theta)}}
+
+$$
 
 But the issue we have now is that the system dynamics are different, and thus we need to calculate new optimal gains for this new system with damping.
 
@@ -537,13 +564,17 @@ But the issue we have now is that the system dynamics are different, and thus we
 
 State-Space System for an Inverted Pendulum with damping:
 
-
-
 $$
+
+
 \dot x = 
 \begin{bmatrix} 
 0 & 1 & 0 & 0 \\
+<<<<<<< HEAD
 0 & -\frac{b}{M} & -\frac{mg}{M} & \frac{\gamma}{M} \\
+=======
+0& -\frac{b}{M} & -\frac{mg}{M} & \frac{\gamma}{M}\\
+>>>>>>> dev
 0 & 0 & 0 & 1 \\
 0 & \frac{b}{ML} & \frac{(M+m)g}{ML} & -\frac{\gamma(M+m)}{mML^2}
 \end{bmatrix}x~+~
@@ -572,10 +603,16 @@ $$
 Given the max acceptable value for x (0.1m), theta (20deg), Force(100N)
 
 $$
+<<<<<<< HEAD
 Q = \left[\begin{matrix}100 & 0 & 0 & 0   \\ 
                           0 & 1 & 0 & 0   \\ 
                           0 & 0 & 8.2 & 0 \\ 
                           0 & 0 & 0 & 1 \end{matrix}\right]
 
+=======
+
+Q = \left[\begin{matrix}100 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 8.2 & 0 \\ 0 & 0 & 0 & 1\end{matrix}\right]
+>>>>>>> dev
 R = 0.0001;
+
 $$
