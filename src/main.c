@@ -27,23 +27,23 @@ int main(){
   //Write column titles
   fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint,ERROR\n");
 
-  state_t x = {0,0,-1e-3,0};                //State Vector {x_pos, x_vel, theta, angular_vel}
-  state_t x_est = {0,0,0,0};                //State Estimation Vector
-  state_t next_state = {0,0,0,0};           //Next State Vector
-  state_t y = {0,0,0,0};                    //Measurement Vector
+  vect4d_t x = {0,0,-1e-3,0};                //State Vector {x_pos, x_vel, theta, angular_vel}
+  vect4d_t x_est = {0,0,0,0};                //State Estimation Vector
+  vect4d_t next_state = {0,0,0,0};           //Next State Vector
+  vect4d_t y = {0,0,0,0};                    //Measurement Vector
   const double *K = gain_settings(K3);      //Gain Vector
   double u = 0;                             //Input force 
 
   //State Process Noise
-  state_t noise = {0,0,0,0};
+  vect4d_t noise = {0,0,0,0};
   double noise_std_dev[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
 
   //Measurement Noise
-  state_t measurement_noise = {0,0,0,0};
+  vect4d_t measurement_noise = {0,0,0,0};
   double sensor_noise_std_dev[4] = {POS_SENSOR_NOISE, 0, ANGLE_SENSOR_NOISE, 0};
   
   //Initial Setpoints for each state
-  state_t setpoint = {0,0,0,0};
+  vect4d_t setpoint = {0,0,0,0};
 
   while(time < SIM_TIME){
 
@@ -67,7 +67,7 @@ int main(){
       setpoint.pendulum.x, setpoint.pendulum.x - x.pendulum.x);
 
     x = next_state;
-    next_state = (state_t){0,0,0,0};
+    next_state = (vect4d_t){0,0,0,0};
     u = 0;
     time += dt;
   }

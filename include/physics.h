@@ -39,22 +39,22 @@ typedef union{
     double theta_dot; //angular velocity [rad/s]
   }pendulum;
 
-}state_t;
+}vect4d_t;
 
 
 extern const pendulum_params_t pendulum_params;
 extern const motor_params_t motor_params;
 
 
-void pendulum_dynamics(state_t const *curr_state, 
-                       state_t  *next_state, 
+void pendulum_dynamics(vect4d_t const *curr_state, 
+                       vect4d_t  *next_state, 
                        const pendulum_params_t pendulum_params, 
                        const double Force,
                        const bool enable_damping);
 
 
-void rk4_step(state_t const *curr_state, 
-              state_t* next_state,
+void rk4_step(vect4d_t const *curr_state, 
+              vect4d_t* next_state,
               const pendulum_params_t pendulum_parms, 
               const double F, const double dt, 
               const bool enable_damping);
