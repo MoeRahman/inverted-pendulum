@@ -8,8 +8,19 @@
 - ODE Solver
 */
 
-const pendulum_params_t pendulum_params = {.G = 9.80665, .m = 10, .M = 20, .L = 0.5, .b = 2, .g = 1};
-const motor_params_t motor_params = {.k1 = 1, .k2 = 1, .R  = 1, .r  = 1};
+const pendulum_params_t pendulum_params = {
+  .G = 9.80665, 
+  .m = 10, 
+  .M = 20, 
+  .L = 0.5, 
+  .b = 2, 
+  .g = 1};
+  
+const motor_params_t motor_params = {
+  .k1 = 1, 
+  .k2 = 1, 
+  .R  = 1, 
+  .r  = 1};
 
 double gaussian_generator(double mean, double std_dev){
 
@@ -33,10 +44,10 @@ void pendulum_dynamics(vect4d_t const *curr_state, vect4d_t* next_state,
     }
 
     //pendulum state variables
-    const double x          = curr_state->pendulum.x;
-    const double x_dot      = curr_state->pendulum.x_dot;
-    const double theta      = curr_state->pendulum.theta;
-    const double theta_dot  = curr_state->pendulum.theta_dot;
+    const double x          = curr_state->state.x;
+    const double x_dot      = curr_state->state.x_dot;
+    const double theta      = curr_state->state.theta;
+    const double theta_dot  = curr_state->state.theta_dot;
 
     //pendulum params
     const double G = pendulum_params.G;
