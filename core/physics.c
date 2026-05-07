@@ -14,13 +14,15 @@ const pendulum_params_t pendulum_params = {
   .M = 20, 
   .L = 0.5, 
   .b = 2, 
-  .g = 1};
-  
+  .g = 1
+};
+
 const motor_params_t motor_params = {
   .k1 = 1, 
   .k2 = 1, 
   .R  = 1, 
-  .r  = 1};
+  .r  = 1
+};
 
 double gaussian_generator(double mean, double std_dev){
 
@@ -36,7 +38,7 @@ double gaussian_generator(double mean, double std_dev){
 }
 
 void pendulum_dynamics(vect4d_t const *curr_state, vect4d_t* next_state, 
-  const pendulum_params_t pendulum_params, const double F, const bool enable_damping){
+  const pendulum_params_t pendulum_params, const double Force, const bool enable_damping){
 
     if (curr_state == NULL || next_state == NULL) {
         fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
@@ -70,7 +72,7 @@ void pendulum_dynamics(vect4d_t const *curr_state, vect4d_t* next_state,
 
     //non-linear dynamics
     double a0 = (g*theta_dot)/(m*L);
-    double a1 = F - b*x_dot + m*L*theta_dot*theta_dot*sin_theta;
+    double a1 = Force - b*x_dot + m*L*theta_dot*theta_dot*sin_theta;
     double a2 = M + m*sin_theta*sin_theta;
     double a3 = m*G*sin_theta*cos_theta;
     double a4 = (M + m)*(G*sin_theta - a0);
@@ -81,7 +83,7 @@ void pendulum_dynamics(vect4d_t const *curr_state, vect4d_t* next_state,
 
 void rk4_step(vect4d_t const *curr_state, vect4d_t* next_state,
               pendulum_params_t pendulum_parms, 
-              const double F, const double dt,
+              const double Force, const double dt,
               const bool enable_damping){
 
     if (curr_state == NULL || next_state == NULL) {
@@ -94,7 +96,7 @@ void rk4_step(vect4d_t const *curr_state, vect4d_t* next_state,
     vect4d_t *k[] = {&k1, &k2, &k3};
 
     for(size_t j = 0; j < 3; ++j){
-      pendulum_dynamics(&state, k[j], pendulum_params, F, enable_damping);
+      pendulum_dynamics(&state, k[j], pendulum_params, Force, enable_damping);
       
       for(size_t i = 0; i < 4; ++i){
         state.arr[i] = curr_state->arr[i] + 0.5*dt*(k[j]->arr[i]);

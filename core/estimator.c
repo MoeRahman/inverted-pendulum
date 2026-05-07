@@ -9,7 +9,9 @@ double angular_encoder_sensor(double theta_measurement){
 }
 
 vect4d_t observation_update(vect4d_t state, vect4d_t sensor_covar){
+
     vect4d_t output;
+    
     return output;
 }
 

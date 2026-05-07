@@ -27,7 +27,7 @@ void pendulum_dynamics(vect4d_t const *curr_state,
 void rk4_step(vect4d_t const *curr_state, 
               vect4d_t* next_state,
               const pendulum_params_t pendulum_parms, 
-              const double F, const double dt, 
+              const double Force, const double dt, 
               const bool enable_damping);
 
 
