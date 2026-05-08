@@ -57,6 +57,7 @@ int main(){
     for(size_t i = 0; i < 4; ++i){
       //Full-State observation assumed
       y.arr[i] = x.arr[i] + measurement_noise.arr[i];
+      
       x_est.arr[i] = y.arr[i];
 
       u -= K[i]*(x_est.arr[i] - setpoint.arr[i]);
