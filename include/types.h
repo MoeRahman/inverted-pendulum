@@ -29,3 +29,7 @@ typedef union{
   }state;
 
 }vect4d_t;
+
+typedef enum {
+  K1, K2, K3
+}gain_t;

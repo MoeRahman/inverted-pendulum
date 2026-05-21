@@ -1,7 +1,6 @@
 #pragma once
 
-typedef enum {
-  K1, K2, K3, K4, K5, K6
-}control_t;
+#include "types.h"
+#include "stddef.h"
 
-const double *gain_settings(control_t control_mode);
+const double *set_controller_gain(gain_t gain);

@@ -3,6 +3,8 @@
 #include "types.h"
 #include <math.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <time.h>
 
 #define ENABLE_DAMPING true

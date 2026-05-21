@@ -1,6 +1,7 @@
 #pragma once
 
 #include "types.h"
+#include "stddef.h"
 
 //Process Noise
 #define POS_NOISE   1e-4
@@ -19,3 +20,6 @@ void observation_update(vect4d_t *measurements, vect4d_t *state,
 
 vect4d_t kalman_filter(vect4d_t *state, vect4d_t *process_covar, 
                        vect4d_t *sensor_covar);
+
+
+const double *set_estimator_gain(gain_t gain);
