@@ -1,5 +1,6 @@
 #include "controller.h"
 #include "estimator.h"
+#include "parameters.h"
 #include "physics.h"
 
 #define SIM_TIME 10
@@ -27,23 +28,21 @@ int main(){
 
   vect4d_t x = {0,0,-1e-3,0};          //State {m, m/s, rad, rad/s}
   vect4d_t x_est = {0,0,0,0};          //State Estimate
+  vect4d_t dx_est = {0,0,0,0};         // d/dt (State Estimate)
   vect4d_t next_state = {0,0,0,0};     //Next State
-  vect4d_t y = {0,0,0,0};              //Measurement
+  double y = 0.0;                      //Position Measurement
 
-  const double *Kc = set_controller_gain(K3); //Gain Vector
-  const double *Kf = set_estimator_gain(K1); //Gain Vector
-  double u = 0;                        //Input force 
+  double *Kc = set_controller_gain(K3); //Control Gain Vector
+  vect4d_t Kf = set_estimator_gain(K1); //Estimator Gain Vector
+  double u = 0;                         //Input force 
 
   //State Process Noise
   vect4d_t noise = {0,0,0,0};
-  const double noise_variance[4] = {POS_NOISE, 
-                                    VEL_NOISE, 
-                                    ANGLE_NOISE, 
-                                    OMEGA_NOISE};
+  const double noise_variance[4] = {POS_NOISE, VEL_NOISE, 
+                                    ANGLE_NOISE, OMEGA_NOISE};
 
   //Measurement Noise
-  vect4d_t measurement_noise = {0,0,0,0};
-  const double sensor_variance[4] = {POS_SENSOR_NOISE, 0, 0, 0};
+  double sensor_noise = 0;
   
   //Initial Setpoints for each state
   vect4d_t setpoint = {0,0,0,0};
@@ -52,26 +51,33 @@ int main(){
 
     for(size_t i = 0; i < 4; ++i){
       noise.arr[i] = gaussian_generator(0, noise_variance[i]);
-      measurement_noise.arr[i] = gaussian_generator(0, sensor_variance[i]);
     }
+    sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
-    if((time >= 2) && (time < 4))setpoint.state.x = 1;
+    if((time >= 2) && (time < 4))setpoint.state.x = 0.1;
+
+    //Measure Position
+    y = x.state.x + sensor_noise;
+
+    //d/dt State Estimation
+    dx_est = kalman_filter(&x_est, &Kf, u, y);
 
     for(size_t i = 0; i < 4; ++i){
-      //Full-State observation assumed
-      y.arr[i] = x.arr[i] + measurement_noise.arr[i];
-      x_est.arr[i] = y.arr[i];
-      u -= Kc[i]*(x_est.arr[i] - setpoint.arr[i]);
+      u -= Kc[i]*(x.arr[i] - setpoint.arr[i]);
     }
 
-    rk4_step(&x, &next_state, pendulum_params, u, dt, ENABLE_DAMPING);
+    rk4_step(&x, &next_state, u, dt);
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", 
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", 
             time, x.state.x, x.state.x_dot, x.state.theta, u, 
-            setpoint.state.x, setpoint.state.x - x.state.x);
+            setpoint.state.x, setpoint.state.x - x.state.x,
+            x_est.state.x, x_est.state.x_dot, x_est.state.theta);
 
-    x = next_state;
-    next_state = (vect4d_t){0,0,0,0};
+    for(size_t i = 0; i < 4; ++i){
+      x.arr[i] = next_state.arr[i] + noise.arr[i];
+      next_state.arr[i] = 0;
+    }
+
     u = 0;
     time += dt;
   }
