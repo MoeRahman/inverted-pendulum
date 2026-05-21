@@ -1,12 +1,12 @@
 #pragma once
 
 typedef struct{
-  const double G; //gravity     [m/s^2]
+  const double g; //gravity     [m/s^2]
   const double m; //ball mass   [kg]
   const double M; //cart mass   [kg]
   const double L; //pole length [m]
   const double b; //linear viscous damping      [N*s/m]
-  const double g; //rotational viscous damping  [N*m*s/rad]
+  const double gamma; //rotational viscous damping  [N*m*s/rad]
 }pendulum_params_t;
 
 
@@ -29,6 +29,8 @@ typedef union{
   }state;
 
 }vect4d_t;
+
+typedef void (*sys_dynamic_func)(vect4d_t*, vect4d_t*, double, double);
 
 typedef enum {
   K1, K2, K3
