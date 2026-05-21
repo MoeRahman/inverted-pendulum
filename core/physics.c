@@ -1,7 +1,5 @@
 
 #include "physics.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /*
 - Non-linear dynamics model for the inverted pendulum and DC motor
