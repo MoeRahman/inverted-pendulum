@@ -1,8 +1,6 @@
 #include "controller.h"
 #include "estimator.h"
 #include "physics.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 #define SIM_TIME 10
 
@@ -27,20 +25,25 @@ int main(){
   //Write column titles
   fprintf(fpt, "Time,Pos_X,Vel_X,Angle,Force,Setpoint,ERROR\n");
 
-  vect4d_t x = {0,0,-1e-3,0};          //State Vector {m, m/s, rad, rad/s}
-  vect4d_t x_est = {0,0,0,0};          //State Estimation Vector
-  vect4d_t next_state = {0,0,0,0};     //Next State Vector
-  vect4d_t y = {0,0,0,0};              //Measurement Vector
-  const double *K = gain_settings(K3); //Gain Vector
+  vect4d_t x = {0,0,-1e-3,0};          //State {m, m/s, rad, rad/s}
+  vect4d_t x_est = {0,0,0,0};          //State Estimate
+  vect4d_t next_state = {0,0,0,0};     //Next State
+  vect4d_t y = {0,0,0,0};              //Measurement
+
+  const double *Kc = set_controller_gain(K3); //Gain Vector
+  const double *Kf = set_estimator_gain(K1); //Gain Vector
   double u = 0;                        //Input force 
 
   //State Process Noise
   vect4d_t noise = {0,0,0,0};
-  const double noise_variance[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
+  const double noise_variance[4] = {POS_NOISE, 
+                                    VEL_NOISE, 
+                                    ANGLE_NOISE, 
+                                    OMEGA_NOISE};
 
   //Measurement Noise
   vect4d_t measurement_noise = {0,0,0,0};
-  const double sensor_variance[4] = {POS_SENSOR_NOISE, 0, ANGLE_SENSOR_NOISE, 0};
+  const double sensor_variance[4] = {POS_SENSOR_NOISE, 0, 0, 0};
   
   //Initial Setpoints for each state
   vect4d_t setpoint = {0,0,0,0};
@@ -57,17 +60,15 @@ int main(){
     for(size_t i = 0; i < 4; ++i){
       //Full-State observation assumed
       y.arr[i] = x.arr[i] + measurement_noise.arr[i];
-      
       x_est.arr[i] = y.arr[i];
-
-      u -= K[i]*(x_est.arr[i] - setpoint.arr[i]);
+      u -= Kc[i]*(x_est.arr[i] - setpoint.arr[i]);
     }
 
     rk4_step(&x, &next_state, pendulum_params, u, dt, ENABLE_DAMPING);
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", time, 
-      x.state.x, x.state.x_dot, x.state.theta, u, 
-      setpoint.state.x, setpoint.state.x - x.state.x);
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,%lf,%lf\n", 
+            time, x.state.x, x.state.x_dot, x.state.theta, u, 
+            setpoint.state.x, setpoint.state.x - x.state.x);
 
     x = next_state;
     next_state = (vect4d_t){0,0,0,0};
