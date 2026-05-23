@@ -30,7 +30,13 @@ typedef union{
 
 }vect4d_t;
 
-typedef void (*sys_dynamic_func)(vect4d_t*, vect4d_t*, double, double);
+
+typedef void (*dynamics_func)(vect4d_t* curr_state, 
+                              vect4d_t* next_state, 
+                              double input, 
+                              double measurement,
+                              void* params);
+
 
 typedef enum {
   K1, K2, K3
