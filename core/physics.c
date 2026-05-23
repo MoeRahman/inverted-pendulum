@@ -18,7 +18,11 @@ double gaussian_generator(double mean, double std_dev){
   return (z0 * std_dev + mean);
 }
 
-void pendulum_dynamics(vect4d_t* curr_state, vect4d_t* next_state, double input, double measurement){
+void pendulum_dynamics(vect4d_t* curr_state, 
+                       vect4d_t* next_state, 
+                       double input, 
+                       double measurement,
+                       void* params){
 
     if (curr_state == NULL || next_state == NULL) {
         fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
@@ -56,10 +60,11 @@ void pendulum_dynamics(vect4d_t* curr_state, vect4d_t* next_state, double input,
     *next_state = (vect4d_t){x_dot, (a1 - a3)/a2 + (m*a0*cos_theta), theta_dot, (a4 - cos_theta*a1)/(L*a2)};
 }
 
-void rk4_step(vect4d_t* curr_state, vect4d_t* next_state,
-              double input, const double dt){
+void rk4_step(dynamics_func sys_func,
+              vect4d_t* curr_state, vect4d_t* next_state,
+              double input, double measurement, void* params, const double dt){
 
-    if (curr_state == NULL || next_state == NULL) {
+    if (curr_state == NULL || next_state == NULL || sys_func == NULL) {
         fprintf(stderr, "[%s error] Null pointer passed for state parameters.\n", __func__);
         return;
     }
@@ -69,17 +74,18 @@ void rk4_step(vect4d_t* curr_state, vect4d_t* next_state,
     vect4d_t *k[] = {&k1, &k2, &k3};
 
     for(size_t j = 0; j < 3; ++j){
-      pendulum_dynamics(&state, k[j], input, 0);
+      sys_func(&state, k[j], input, measurement, params);
+      //pendulum_dynamics(&state, k[j], input, 0);
       
       for(size_t i = 0; i < 4; ++i){
         state.arr[i] = curr_state->arr[i] + 0.5*dt*(k[j]->arr[i]);
       }
     }
 
-    pendulum_dynamics(&state, &k4, input, 0);
+    sys_func(&state, &k4, input, measurement, params);
+    //pendulum_dynamics(&state, &k4, input, 0);
     for(size_t i = 0; i < 4; ++i){
-      next_state->arr[i] = curr_state->arr[i] + (dt/6.0)*(k1.arr[i] + 2.0*k2.arr[i] + 2.0*k3.arr[i] + k4.arr[i]);
+      next_state->arr[i] += curr_state->arr[i];
+      next_state->arr[i] += (dt/6.0)*(k1.arr[i] + 2.0*k2.arr[i] + 2.0*k3.arr[i] + k4.arr[i]);
     }
-
-
 }
