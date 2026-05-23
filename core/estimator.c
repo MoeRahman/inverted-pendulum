@@ -11,10 +11,13 @@ double angular_encoder_sensor(double theta_measurement){
     return 0;
 }
 
-vect4d_t kalman_filter(vect4d_t *state_estimate, vect4d_t *kalman_gain,
-                       double input, double measurement){
+void kalman_filter(vect4d_t* state_estimate, 
+                   vect4d_t* d_dt_state_estimate,
+                   double input, 
+                   double measurement,
+                   void* params){
 
-    vect4d_t d_dt_state_estimate = {0, 0, 0, 0};
+    double* kalman_gain = (double*)params;
     
     double a22 = pendulum_params.b/pendulum_params.M;
     double a23 = (pendulum_params.m*pendulum_params.g)/pendulum_params.M;
@@ -36,34 +39,32 @@ vect4d_t kalman_filter(vect4d_t *state_estimate, vect4d_t *kalman_gain,
 
     //Measurement Matrix
     double C[4] = {1, 0, 0, 0};
+    double obsvr_error = measurement - C[0]*state_estimate->state.x;
 
     // d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
+
     for(size_t i = 0; i < 4; ++i){
       for(size_t j = 0; j < 4; ++j){
-        d_dt_state_estimate.arr[i] += A[i][j]*state_estimate->arr[j];
+        d_dt_state_estimate->arr[i] += A[i][j]*state_estimate->arr[j];
       }
-      d_dt_state_estimate.arr[i] +=  B[i]*input + kalman_gain->arr[i]*(measurement - C[0]*state_estimate->state.x);
+      d_dt_state_estimate->arr[i] +=  B[i]*input + kalman_gain[i]*obsvr_error;
     }
-
-    return d_dt_state_estimate;
 }
 
 
-vect4d_t set_estimator_gain(gain_t gain){
+double* set_estimator_gain(gain_t gain){
 
-  static const double GAIN_TABLE[3][4] = {
+  static double GAIN_TABLE[3][4] = {
     {10.236, 52.391, -58.799, -300.807},
     {1, 2, 3, 4},
     {4, 3, 2, 1}
   };
 
-  vect4d_t kalman_gains = {0,0,0,0};
-
   if((gain >= 0) && (gain < 3)){
-    memcpy(kalman_gains.arr, GAIN_TABLE[gain], sizeof(kalman_gains.arr));
+    return GAIN_TABLE[gain];
+  }else{
+    return NULL;
   }
-
-  return kalman_gains;
 }
 
 
