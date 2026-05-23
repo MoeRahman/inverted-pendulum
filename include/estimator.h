@@ -15,8 +15,10 @@
 
 double angular_encoder_sensor(double theta_measurement);
 
-vect4d_t kalman_filter(vect4d_t* state_estimate,
-                       vect4d_t* kalman_gain,
-                       double input, double measurement);
+void kalman_filter(vect4d_t* state_estimate,
+                   vect4d_t* d_dt_state_estimate,
+                   double input, 
+                   double measurement,
+                   void* params);
 
-vect4d_t set_estimator_gain(gain_t gain);
+double* set_estimator_gain(gain_t gain);
