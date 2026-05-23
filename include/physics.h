@@ -18,12 +18,17 @@
 void pendulum_dynamics(vect4d_t* curr_state, 
                        vect4d_t* next_state, 
                        double input,
-                       double measurement);
+                       double measurement,
+                       void* params);
 
 
-void rk4_step(vect4d_t* curr_state, 
+void rk4_step(dynamics_func sys_func,
+              vect4d_t* curr_state, 
               vect4d_t* next_state,
-              double input, const double dt);
+              double input, 
+              double measurement,
+              void* params,
+              const double dt);
 
 
 double gaussian_generator(double mean, double std_dev);
