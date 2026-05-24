@@ -85,7 +85,6 @@ void rk4_step(dynamics_func sys_func,
     sys_func(&state, &k4, input, measurement, params);
     //pendulum_dynamics(&state, &k4, input, 0);
     for(size_t i = 0; i < 4; ++i){
-      next_state->arr[i] += curr_state->arr[i];
-      next_state->arr[i] += (dt/6.0)*(k1.arr[i] + 2.0*k2.arr[i] + 2.0*k3.arr[i] + k4.arr[i]);
+      next_state->arr[i] = curr_state->arr[i] + (dt/6.0)*(k1.arr[i] + 2.0*k2.arr[i] + 2.0*k3.arr[i] + k4.arr[i]);
     }
 }
