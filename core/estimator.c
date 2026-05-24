@@ -33,17 +33,17 @@ void kalman_filter(vect4d_t* state_estimate,
     //State Transition Matrix
     double A[4][4] = {
         {0,    1,    0,    0},
-        {0, -a22,  a23, -a24},
+        {0, -a22,  -a23, a24},
         {0,    0,    0,    1},
-        {0, -a42, -a43, -a44}
+        {0, a42, a43, -a44}
     };
 
     //Input Matrix
     double B[4] = {0, 1/pendulum_params.M, 0, -1/(pendulum_params.M*pendulum_params.L)};
 
     //Measurement Matrix
-    double C[4] = {1, 0, 0q, 0};
-    double obsvr_error = measurement - C[0]*state_estimate->state.x;
+    double C[4] = {1, 0, 0, 0};
+    double obsvr_error = measurement - C[0]*state_estimate->arr[0];
 
     // d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
     for(size_t i = 0; i < 4; ++i){
