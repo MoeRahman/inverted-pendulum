@@ -33,16 +33,16 @@ void kalman_filter(vect4d_t* state_estimate,
     //State Transition Matrix
     double A[4][4] = {
         {0,    1,    0,    0},
-        {0, -a22, -a23,  a24},
+        {0, -a22,  a23, -a24},
         {0,    0,    0,    1},
-        {0,  a42,  a43, -a44}
+        {0, -a42, -a43, -a44}
     };
 
     //Input Matrix
     double B[4] = {0, 1/pendulum_params.M, 0, -1/(pendulum_params.M*pendulum_params.L)};
 
     //Measurement Matrix
-    double C[4] = {1, 0, 0, 0};
+    double C[4] = {1, 0, 0q, 0};
     double obsvr_error = measurement - C[0]*state_estimate->state.x;
 
     // d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
@@ -58,9 +58,9 @@ void kalman_filter(vect4d_t* state_estimate,
 double* set_estimator_gain(gain_t gain){
 
   static double GAIN_TABLE[3][4] = {
-    {10.236, 52.391, -58.799, -300.807},
-    {1, 2, 3, 4},
-    {4, 3, 2, 1}
+    {10.236, 52.391, -58.799, -300.807}, //theta = 0
+    {6.8046e-01, 2.2651e-01, -1.7617e-03, 5.0846e-05}, //theta = M_PI
+    {6.8278e-03, 1.8618e-03, 1.2109e-05, 3.4978e-04}
   };
 
   if((gain >= 0) && (gain < 3)){
