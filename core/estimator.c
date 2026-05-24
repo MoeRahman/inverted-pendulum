@@ -18,6 +18,10 @@ void kalman_filter(vect4d_t* state_estimate,
                    void* params){
 
     double* kalman_gain = (double*)params;
+
+    for(size_t i = 0; i < 4; ++i) {
+        d_dt_state_estimate->arr[i] = 0.0;
+    }
     
     double a22 = pendulum_params.b/pendulum_params.M;
     double a23 = (pendulum_params.m*pendulum_params.g)/pendulum_params.M;
@@ -42,7 +46,6 @@ void kalman_filter(vect4d_t* state_estimate,
     double obsvr_error = measurement - C[0]*state_estimate->state.x;
 
     // d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
-
     for(size_t i = 0; i < 4; ++i){
       for(size_t j = 0; j < 4; ++j){
         d_dt_state_estimate->arr[i] += A[i][j]*state_estimate->arr[j];
