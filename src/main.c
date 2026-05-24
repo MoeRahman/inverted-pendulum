@@ -19,14 +19,14 @@ int main(){
       return 1;
   }
 
+  fprintf(fpt, "time,x,vel,angle,angle_vel,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas");
+
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
   double dt = 0.01; //Units [sec]
 
   //Write column titles
-  fprintf(fpt, "i.time,ii.Pos_X,iii.vel_X,iv.angle,v.force,vi.setpoint,vii.error,viii.pos_est,ix.vel_est,x.angle_est\n");
-
-  vect4d_t state = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
+  vect4d_t state = {0,0,M_PI - 0.03,0};      //State {m, m/s, rad, rad/s}
   vect4d_t next_state = {0,0,0,0};     //Next State
 
   vect4d_t state_est = {0,0,0,0};      //State Estimate
@@ -35,7 +35,7 @@ int main(){
   double y = 0.0;                      //Position Measurement
 
   double* Kc = set_controller_gain(K3); //Control Gain Vector
-  double* Kf = set_estimator_gain(K1); //Estimator Gain Vector
+  double* Kf = set_estimator_gain(K2); //Estimator Gain Vector
 
   double u = 0;                         //Input force 
 
@@ -57,7 +57,8 @@ int main(){
 
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
-    if((time >= 2) && (time < 4))setpoint.state.x = 1;
+    //if((time >= 2) && (time < 4))setpoint.state.x = 0.1;
+    //setpoint.state.x = 0.05*sin(M_PI*time/5.0);
 
     //Measure Position
     y = state.state.x + sensor_noise;
@@ -66,14 +67,14 @@ int main(){
     rk4_step(kalman_filter, &state_est, &state_est, u, y, Kf, dt);
 
     u = 0;
-    for(size_t i = 0; i < 4; ++i){
-      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
-    }
+    // for(size_t i = 0; i < 4; ++i){
+    //   u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+    // }
 
-    rk4_step(pendulum_dynamics, &state, &next_state, u, y, &Kf, dt);
+    rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u/1000); 
-    fprintf(fpt, "%lf,%lf,", setpoint.state.x, setpoint.state.x - state.state.x);
+    fprintf(fpt, "%lf,%lf,", setpoint.state.x, state.state.x - state_est.state.x);
     fprintf(fpt, "%lf,%lf,%lf,%lf\n", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
 
     for(size_t i = 0; i < 4; ++i){
