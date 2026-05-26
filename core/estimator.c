@@ -35,7 +35,7 @@ void kalman_filter(vect4d_t* state_estimate,
         {0,    1,    0,    0},
         {0, -a22,  -a23, a24},
         {0,    0,    0,    1},
-        {0, a42, a43, -a44}
+        {0,  a42,  a43, -a44}
     };
 
     //Input Matrix
