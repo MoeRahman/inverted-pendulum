@@ -1,6 +1,6 @@
 load './plots/style.gp'
 
-set terminal pngcairo size 800,600
+set terminal pngcairo size 640,540
 set output 'plots/plot2.png'
 
 set xlabel "Time (seconds)" textcolor rgb "white" font ",12"
