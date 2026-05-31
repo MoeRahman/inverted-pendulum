@@ -51,23 +51,21 @@ int main(){
 
   while(time < SIM_TIME){
 
-    noise = gaussian_generator(0, 0);
-    sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
+    noise = gaussian_generator(0, 1e-3);
+    sensor_noise = gaussian_generator(0, 1e-4);
 
-    if(time > 1) setpoint.state.x = 1;
+    if(time > 1) setpoint.state.x = 0.01*sin(M_PI*time/5);
+
+    // Measure Position
+    y = state.state.x + sensor_noise;
 
     u = noise;
-    for(size_t i = 0; i < 4; ++i){
-      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
-    }
+    for(size_t i = 0; i < 4; ++i)u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
 
     // Step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
     state = next_state;
-
-    // Measure Position
-    y = state.state.x + sensor_noise;
 
     //Full-State Estimation
     next_state_est = (vect4d_t){0,0,0,0};
