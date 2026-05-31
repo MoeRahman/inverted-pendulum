@@ -29,35 +29,43 @@ void pendulum_dynamics(vect4d_t* curr_state,
         return;
     }
 
-    //pendulum state variables
+    // //pendulum state variables
     double x          = curr_state->state.x;
     double x_dot      = curr_state->state.x_dot;
     double theta      = curr_state->state.theta;
     double theta_dot  = curr_state->state.theta_dot;
 
-    //pendulum params
+    // //pendulum params
     double g = pendulum_params.g;
     double m = pendulum_params.m;
     double M = pendulum_params.M;
-    double L = pendulum_params.L;
+    double l = pendulum_params.L;
+    double mt = M + m;
+    double F = input;
+    double I = m*l*l/3;
 
     //damping constants
     double b = pendulum_params.b;
     double gamma = pendulum_params.gamma;
 
-    //trig ratios [angle in radians]
-    const double sin_theta = sin(theta);
-    const double cos_theta = cos(theta);
+    // Pre-calculate shared trigonometric functions
+    double cos_th = cos(theta);
+    double sin_th = sin(theta);
+    double omega_sq = theta_dot * theta_dot;
 
-    //non-linear dynamics
-    double a0 = (gamma*theta_dot)/(m*L);
-    double a1 = input - b*x_dot + m*L*theta_dot*theta_dot*sin_theta;
-    double a2 = M + m*sin_theta*sin_theta;
-    double a3 = m*g*sin_theta*cos_theta;
-    double a4 = (M + m)*(g*sin_theta - a0);
+    // Calculate the common nonlinear denominator
+    double den = 4.0 * mt * I + mt * m * l * l - m * m * l * l * cos_th * cos_th;
+
+    // Pre-calculate the components of the input vector
+    double vec1 = F - b * x_dot + 0.5 * m * l * omega_sq * sin_th;
+    double vec2 = 0.5 * m * g * l * sin_th - gamma * theta_dot;
+
+    // Compute final accelerations (Row 1 and Row 2 expansions)
+    double xddot = (4.0 / den) * ((I + (m * l * l) / 4.0) * vec1 + (-0.5 * m * l * cos_th) * vec2);
+    double theta_ddot = (4.0 / den) * ((-0.5 * m * l * cos_th) * vec1 + mt * vec2);
 
     //next state
-    *next_state = (vect4d_t){x_dot, (a1 - a3)/a2 + (m*a0*cos_theta), theta_dot, (a4 - cos_theta*a1)/(L*a2)};
+    *next_state = (vect4d_t){x_dot, xddot, theta_dot, theta_ddot};
 }
 
 void rk4_step(dynamics_func sys_func,

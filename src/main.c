@@ -57,16 +57,15 @@ int main(){
 
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
-    if((time >= 2) && (time < 4))setpoint.state.x = 1;
-    if((time >= 8) && (time < 10))setpoint.state.x = 0;
+    if(time > 5)setpoint.state.x = 0;
 
     //Full-State Estimation
     //rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
 
     u = 0;
-    for(size_t i = 0; i < 4; ++i){
-      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
-    }
+    // for(size_t i = 0; i < 4; ++i){
+    //   u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+    // }
 
     // Step-forward non-linear dynamics
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);

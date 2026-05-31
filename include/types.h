@@ -2,7 +2,7 @@
 
 typedef struct{
   const double g; //gravity     [m/s^2]
-  const double m; //ball mass   [kg]
+  const double m; //pole mass   [kg]
   const double M; //cart mass   [kg]
   const double L; //pole length [m]
   const double b; //linear viscous damping      [N*s/m]
