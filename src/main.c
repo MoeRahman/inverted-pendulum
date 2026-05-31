@@ -3,7 +3,7 @@
 #include "parameters.h"
 #include "physics.h"
 
-#define SIM_TIME 4
+#define SIM_TIME 10
 
 int main(){
 
@@ -51,29 +51,25 @@ int main(){
 
   while(time < SIM_TIME){
 
-    noise = gaussian_generator(0, 1e-2);
+    noise = gaussian_generator(0, 0);
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
+
+    // Step-forward non-linear dynamics
+    next_state = (vect4d_t){0,0,0,0};
+    rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
+    state = next_state;
 
     // Measure Position
     y = state.state.x + sensor_noise;
 
-    //if((time > 0.5))setpoint.state.x = 1;
-    setpoint.state.x = 0.5*sin(2*M_PI*time);
-
     //Full-State Estimation
+    next_state_est = (vect4d_t){0,0,0,0};
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
+    state_est = next_state_est;
 
     u = noise;
     for(size_t i = 0; i < 4; ++i){
       u -= Kc[i]*(state_est.arr[i] - setpoint.arr[i]);
-    }
-
-    // Step-forward non-linear dynamics
-    rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
-
-    for(size_t i = 0; i < 4; ++i){
-      state.arr[i] = next_state.arr[i];
-      state_est.arr[i] = next_state_est.arr[i];
     }
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
@@ -81,8 +77,6 @@ int main(){
     fprintf(fpt, "%lf,%lf,%lf,%lf,", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
     fprintf(fpt, "%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot);
 
-    next_state = (vect4d_t){0,0,0,0};
-    next_state_est = (vect4d_t){0,0,0,0};
     time += dt;
   }
 
