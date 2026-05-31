@@ -15,6 +15,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+
 void pendulum_dynamics(vect4d_t* curr_state, 
                        vect4d_t* next_state, 
                        double input,
