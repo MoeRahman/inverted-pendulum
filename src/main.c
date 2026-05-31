@@ -3,7 +3,7 @@
 #include "parameters.h"
 #include "physics.h"
 
-#define SIM_TIME 10
+#define SIM_TIME 20
 
 int main(){
 
@@ -34,7 +34,7 @@ int main(){
 
   double y = 0.0;                      //Position Measurement
 
-  double* Kc = set_controller_gain(K3); //Control Gain Vector
+  double* Kc = set_controller_gain(K1); //Control Gain Vector
   double* Kf = set_estimator_gain(K1); //Estimator Gain Vector
 
   double u = 0;                         //Input force 
@@ -57,15 +57,16 @@ int main(){
 
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
-    if(time > 5)setpoint.state.x = 0;
+    if((time > 5))setpoint.state.x = 0.5;
+    //setpoint.state.x = 0.1*sin(M_PI*time/2);
 
     //Full-State Estimation
     //rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
 
     u = 0;
-    // for(size_t i = 0; i < 4; ++i){
-    //   u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
-    // }
+    for(size_t i = 0; i < 4; ++i){
+      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+    }
 
     // Step-forward non-linear dynamics
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
