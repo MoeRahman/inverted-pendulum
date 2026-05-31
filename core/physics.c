@@ -35,7 +35,7 @@ void pendulum_dynamics(vect4d_t* curr_state,
     double theta      = curr_state->state.theta;
     double theta_dot  = curr_state->state.theta_dot;
 
-    // //pendulum params
+    //pendulum params
     double g = pendulum_params.g;
     double m = pendulum_params.m;
     double M = pendulum_params.M;

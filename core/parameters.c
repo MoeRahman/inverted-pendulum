@@ -6,7 +6,7 @@ const pendulum_params_t pendulum_params = {
   .m = 10, 
   .M = 20, 
   .L = 0.5, 
-  .b = 2, 
+  .b = 1, 
   .gamma = 1
 };
 
