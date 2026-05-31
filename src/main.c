@@ -54,6 +54,13 @@ int main(){
     noise = gaussian_generator(0, 0);
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
+    if(time > 1) setpoint.state.x = 1;
+
+    u = noise;
+    for(size_t i = 0; i < 4; ++i){
+      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+    }
+
     // Step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
@@ -66,11 +73,6 @@ int main(){
     next_state_est = (vect4d_t){0,0,0,0};
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
     state_est = next_state_est;
-
-    u = noise;
-    for(size_t i = 0; i < 4; ++i){
-      u -= Kc[i]*(state_est.arr[i] - setpoint.arr[i]);
-    }
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
     fprintf(fpt, "%lf,%lf,", setpoint.state.x, state.state.x - state_est.state.x);
