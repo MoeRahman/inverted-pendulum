@@ -3,7 +3,7 @@
 #include "parameters.h"
 #include "physics.h"
 
-#define SIM_TIME 20
+#define SIM_TIME 4
 
 int main(){
 
@@ -19,7 +19,7 @@ int main(){
       return 1;
   }
 
-  fprintf(fpt, "time,x,vel,angle,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas\n");
+  fprintf(fpt, "time,x,vel,angle,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas,ang_vel,ang_vel_est\n");
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
@@ -40,8 +40,8 @@ int main(){
   double u = 0;                         //Input force 
 
   //State Process Noise
-  vect4d_t noise = {0,0,0,0};
-  const double noise_variance[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
+  double noise = 0;
+  //const double noise_variance[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
 
   //Measurement Noise
   double sensor_noise = 0;
@@ -51,39 +51,35 @@ int main(){
 
   while(time < SIM_TIME){
 
-    for(size_t i = 0; i < 4; ++i){
-      noise.arr[i] = gaussian_generator(0, noise_variance[i]);
-    }
-
+    noise = gaussian_generator(0, 1e-2);
     sensor_noise = gaussian_generator(0, POS_SENSOR_NOISE);
 
-    if((time > 5))setpoint.state.x = 0.5;
-    //setpoint.state.x = 0.1*sin(M_PI*time/2);
+    // Measure Position
+    y = state.state.x + sensor_noise;
+
+    //if((time > 0.5))setpoint.state.x = 1;
+    setpoint.state.x = 0.5*sin(2*M_PI*time);
 
     //Full-State Estimation
-    //rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
+    rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
 
-    u = 0;
+    u = noise;
     for(size_t i = 0; i < 4; ++i){
-      u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+      u -= Kc[i]*(state_est.arr[i] - setpoint.arr[i]);
     }
 
     // Step-forward non-linear dynamics
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
 
     for(size_t i = 0; i < 4; ++i){
-      state.arr[i] = next_state.arr[i] + noise.arr[i];
+      state.arr[i] = next_state.arr[i];
       state_est.arr[i] = next_state_est.arr[i];
     }
 
-    // Measure Position
-    y = state.state.x + sensor_noise;
-
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
     fprintf(fpt, "%lf,%lf,", setpoint.state.x, state.state.x - state_est.state.x);
-    fprintf(fpt, "%lf,%lf,%lf,%lf\n", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
-
-
+    fprintf(fpt, "%lf,%lf,%lf,%lf,", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
+    fprintf(fpt, "%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot);
 
     next_state = (vect4d_t){0,0,0,0};
     next_state_est = (vect4d_t){0,0,0,0};
