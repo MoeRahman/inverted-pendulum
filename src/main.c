@@ -19,7 +19,7 @@ int main(){
       return 1;
   }
 
-  fprintf(fpt, "time,x,vel,angle,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas,ang_vel,ang_vel_est\n");
+  fprintf(fpt, "time,x,vel,angle,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas,ang_vel,ang_vel_est,vel_err,theta_err,ang_vel_err\n");
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
@@ -37,7 +37,8 @@ int main(){
   double* Kc = set_controller_gain(K1); //Control Gain Vector
   double* Kf = set_estimator_gain(K1); //Estimator Gain Vector
 
-  double u = 0;                         //Input force 
+  double u = 0; //Input force 
+  double err[4] = {0,0,0,0};
 
   //State Process Noise
   double noise = 0;
@@ -54,28 +55,31 @@ int main(){
     noise = gaussian_generator(0, 1e-3);
     sensor_noise = gaussian_generator(0, 1e-4);
 
-    if(time > 1) setpoint.state.x = 0.01*sin(M_PI*time/5);
-
-    // Measure Position
-    y = state.state.x + sensor_noise;
-
-    u = noise;
-    for(size_t i = 0; i < 4; ++i)u -= Kc[i]*(state.arr[i] - setpoint.arr[i]);
+    if(time > 1) setpoint.state.x = 1*sin(M_PI*time);
 
     // Step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
     state = next_state;
 
+    // Measure Position
+    y = state.state.x + sensor_noise;
+
     //Full-State Estimation
     next_state_est = (vect4d_t){0,0,0,0};
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
     state_est = next_state_est;
 
+    u = noise;
+    for(size_t i = 0; i < 4; ++i){
+      err[i] = setpoint.arr[i] - state.arr[i];
+      u += Kc[i]*err[i];
+    }
+
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
-    fprintf(fpt, "%lf,%lf,", setpoint.state.x, state.state.x - state_est.state.x);
+    fprintf(fpt, "%lf,%lf,", setpoint.state.x, err[0]);
     fprintf(fpt, "%lf,%lf,%lf,%lf,", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
-    fprintf(fpt, "%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot);
+    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot, err[1], err[2], err[3]);
 
     time += dt;
   }
