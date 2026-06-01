@@ -10,7 +10,7 @@
 #define OMEGA_NOISE 1e-6
 
 //Sensor Noise
-#define POS_SENSOR_NOISE   1e-5
+#define POS_SENSOR_NOISE   1e-1
 #define ANGLE_SENSOR_NOISE 1e-3
 
 double angular_encoder_sensor(double theta_measurement);

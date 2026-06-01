@@ -53,9 +53,9 @@ int main(){
   while(time < SIM_TIME){
 
     noise = gaussian_generator(0, 1e-3);
-    sensor_noise = gaussian_generator(0, 1e-4);
+    sensor_noise = gaussian_generator(0, 1e-2);
 
-    if(time > 1) setpoint.state.x = 1*sin(M_PI*time);
+    if(time > 1) setpoint.state.x = 1;
 
     // Step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
