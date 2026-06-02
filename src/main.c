@@ -23,7 +23,8 @@ int main(){
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
-  double dt = 0.0001; //Units [sec]
+  const double dt = 0.0001; //Units [sec]
+  const double step = SIM_TIME/dt - 1;
 
   //Write column titles
   vect4d_t state = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
@@ -33,15 +34,15 @@ int main(){
 
   double y = 0.0; //Position Measurement
 
-  double* Kc = set_controller_gain(K1); //Control Gain Vector
+  double* Kc = set_controller_gain(K3); //Control Gain Vector
   double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
 
   double u = 0; //Input force 
   double err[4] = {0,0,0,0};
+  double rmse[4] = {0,0,0,0};
 
-  //State Process Noise
-  double noise = 0;
-  //const double noise_variance[4] = {POS_NOISE, VEL_NOISE, ANGLE_NOISE, OMEGA_NOISE};
+  //Process Noise
+  double process_noise = 0;
 
   //Measurement Noise
   double sensor_noise = 0;
@@ -49,15 +50,19 @@ int main(){
   //Initial Setpoints for each state
   vect4d_t setpoint = {0,0,0,0};
 
+  double impulse = 0;
+
   while(time < SIM_TIME){
 
     //gaussian_generator(mean, variance)
-    noise = gaussian_generator(0, 1e-3);
-    sensor_noise = gaussian_generator(0, 1e-2);
+    process_noise = gaussian_generator(PROCESS_NOISE_MEAN, PROCESS_NOISE_COVAR);
+    sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if((time > 1) && (time <= 5)) setpoint.state.x = 1;
+    if((time > 1) && (time <= 5)) setpoint.state.x = 2;
     if((time > 5) && (time <= 10)) setpoint.state.x = 0;
+    //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
+
 
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
@@ -72,9 +77,10 @@ int main(){
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
     state_est = next_state_est;
 
-    u = noise;
+    u = process_noise;
     for(size_t i = 0; i < 4; ++i){
       err[i] = state.arr[i] - state_est.arr[i];
+      rmse[i] += err[i]*err[i];
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
 
@@ -86,8 +92,14 @@ int main(){
     time += dt;
   }
 
+  char states[4] = {'x', 'v', 'a', 'o'};
+  for(size_t i=0; i < 4; ++i){
+    double val = sqrt(rmse[i]/step);
+    printf("RMS %c Error:\t%lf\n", states[i], val);
+  }
+
   fclose(fpt);
-  printf(".dat file created successfully.\n");
+  printf(".csv file created successfully.\n");
 
   return 0;
 }
