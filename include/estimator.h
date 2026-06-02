@@ -8,9 +8,13 @@
 #define VEL_NOISE   1e-7
 #define ANGLE_NOISE 0
 #define OMEGA_NOISE 1e-6
+//Noise acting on the input rather than each state(this ensures physical laws are obeyed)
+#define PROCESS_NOISE_MEAN  0
+#define PROCESS_NOISE_COVAR 1e-3
 
 //Sensor Noise
-#define POS_SENSOR_NOISE   1e-1
+#define POS_SENSOR_MEAN    0
+#define POS_SENSOR_COVAR   1e-2
 #define ANGLE_SENSOR_NOISE 1e-3
 
 double angular_encoder_sensor(double theta_measurement);
