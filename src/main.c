@@ -34,7 +34,7 @@ int main(){
   double y = 0.0; //Position Measurement
 
   double* Kc = set_controller_gain(K1); //Control Gain Vector
-  double* Kf = set_estimator_gain(K1); //Estimator Gain Vector
+  double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
 
   double u = 0; //Input force 
   double err[4] = {0,0,0,0};
@@ -56,7 +56,8 @@ int main(){
     sensor_noise = gaussian_generator(0, 1e-2);
 
     //step
-    if(time > 1) setpoint.state.x = 1;
+    if((time > 1) && (time <= 5)) setpoint.state.x = 1;
+    if((time > 5) && (time <= 10)) setpoint.state.x = 0;
 
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
