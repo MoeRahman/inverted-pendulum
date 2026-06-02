@@ -522,3 +522,7 @@ $$
 Q = \left[\begin{matrix}100 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 8.2 & 0 \\ 0 & 0 & 0 & 1\end{matrix}\right]
 R = 0.0001;
 $$
+
+### June 2, 2026
+Finally finished integrating the full-state estimator and optimal feedback control together to get a Linear Guassian Regulator Controller working for an inverted pendulum.
+
