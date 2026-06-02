@@ -23,7 +23,7 @@ int main(){
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
-  double dt = 0.001; //Units [sec]
+  double dt = 0.0001; //Units [sec]
 
   //Write column titles
   vect4d_t state = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
@@ -74,7 +74,7 @@ int main(){
     u = noise;
     for(size_t i = 0; i < 4; ++i){
       err[i] = state.arr[i] - state_est.arr[i];
-      u += Kc[i]*(setpoint.arr[i] - state.arr[i]);
+      u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
