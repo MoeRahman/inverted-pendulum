@@ -25,11 +25,11 @@ Run the following bash script: `./plot.sh`
 Example Output:
 
 <div align="center">
-    <img src="simulation.png" width="45%" /><img src="force.png" width="45%" />
+    <img src="plot1.png" width="199%" /><img src="plot2.png" width="100%" />
 </div>
 
 <div align="center">
-    <img src="velocity.png" width="45%" /> <img src="error.png" width="45%" />
+    <img src="plot3.png" width="100%" /> <img src="plot4.png" width="100%" />
 </div>
 
 ## Tentitive Plan:
