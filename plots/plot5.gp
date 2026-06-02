@@ -16,4 +16,4 @@ set grid
 
 # 5. Multi-Column Plotting (Using your column indices)
 # 1:time 2:x 3.vel 4:angle 5:input 6:setpoint 7:pos_err 8:x_est 9:vel_est 10:angle_est 11:x_meas 12:ang_vel 13:ang_vel_est 14:vel_err 15:theta_err 16:ang_vel_err
-plot './pendulum_sim.csv' using 1:5 title 'Force' ls 1
+plot './pendulum_sim.csv' using 1:5 title 'Force' w l ls 1
