@@ -23,16 +23,15 @@ int main(){
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
-  double dt = 0.01; //Units [sec]
+  double dt = 0.001; //Units [sec]
 
   //Write column titles
   vect4d_t state = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
   vect4d_t next_state = {0,0,0,0};     //Next State
-
   vect4d_t state_est = {0,0,0,0};      //State Estimate
-  vect4d_t next_state_est = {0,0,0,0};         // d/dt (State Estimate)
+  vect4d_t next_state_est = {0,0,0,0}; // d/dt (State Estimate)
 
-  double y = 0.0;                      //Position Measurement
+  double y = 0.0; //Position Measurement
 
   double* Kc = set_controller_gain(K1); //Control Gain Vector
   double* Kf = set_estimator_gain(K1); //Estimator Gain Vector
@@ -52,28 +51,30 @@ int main(){
 
   while(time < SIM_TIME){
 
+    //gaussian_generator(mean, variance)
     noise = gaussian_generator(0, 1e-3);
     sensor_noise = gaussian_generator(0, 1e-2);
 
+    //step
     if(time > 1) setpoint.state.x = 1;
 
-    // Step-forward non-linear dynamics
+    //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
     state = next_state;
 
-    // Measure Position
+    //measure Position
     y = state.state.x + sensor_noise;
 
-    //Full-State Estimation
+    //full-state estimation
     next_state_est = (vect4d_t){0,0,0,0};
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
     state_est = next_state_est;
 
     u = noise;
     for(size_t i = 0; i < 4; ++i){
-      err[i] = setpoint.arr[i] - state.arr[i];
-      u += Kc[i]*err[i];
+      err[i] = state.arr[i] - state_est.arr[i];
+      u += Kc[i]*(setpoint.arr[i] - state.arr[i]);
     }
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
