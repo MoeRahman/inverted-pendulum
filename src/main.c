@@ -23,7 +23,7 @@ int main(){
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
-  const double dt = 0.0001; //Units [sec]
+  const double dt = 0.00001; //Units [sec]
   const double step = SIM_TIME/dt - 1;
 
   //Write column titles
@@ -59,7 +59,7 @@ int main(){
     sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if((time > 1) && (time <= 5)) setpoint.state.x = 2;
+    if((time > 1) && (time <= 5)) setpoint.state.x = 0.25;
     if((time > 5) && (time <= 10)) setpoint.state.x = 0;
     //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
 

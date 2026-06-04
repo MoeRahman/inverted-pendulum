@@ -23,7 +23,7 @@ set style line 1 lc rgb '#33FF33' lw 5 pt 7 ps 1.5
 set style line 2 lc rgb '#ff00ff' lw 5 dt 2
 
 # Line 3: Retro Orange Points (Line type 0 hides the connecting line)
-set style line 3 lc rgb '#FFB000' pt 7 ps 0.1 dt 1
+set style line 3 lc rgb '#33FF33' pt 7 ps 0.1 dt 1
 
 # Line 4: Neon Red, Solid Line
 set style line 4 lc rgb '#E63946' lw 5 dt 2
