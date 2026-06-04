@@ -24,7 +24,6 @@ int main(){
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
   const double dt = 0.0001; //Units [sec]
-  const double step = SIM_TIME/dt - 1;
 
   //Write column titles
   vect4d_t state          = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
@@ -37,7 +36,6 @@ int main(){
 
   double u = 0; //Input force 
   double err[4]  = {0};
-  double rmse[4] = {0};
   
   //Initial Setpoints for each state
   vect4d_t setpoint = {0};
@@ -79,12 +77,6 @@ int main(){
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot, err[1], err[2], err[3]);
 
     time += dt;
-  }
-
-  char states[4] = {'1', '2', '3', '4'};
-  for(size_t i=0; i < 4; ++i){
-    double val = sqrt(rmse[i]/step);
-    printf("RMS %c Error:\t%lf\n", states[i], val);
   }
 
   fclose(fpt);
