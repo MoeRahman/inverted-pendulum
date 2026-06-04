@@ -23,54 +23,43 @@ int main(){
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
-  const double dt = 0.00001; //Units [sec]
+  const double dt = 0.0001; //Units [sec]
   const double step = SIM_TIME/dt - 1;
 
   //Write column titles
-  vect4d_t state = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
-  vect4d_t next_state = {0,0,0,0};     //Next State
-  vect4d_t state_est = {0,0,0,0};      //State Estimate
-  vect4d_t next_state_est = {0,0,0,0}; // d/dt (State Estimate)
-
-  double y = 0.0; //Position Measurement
+  vect4d_t state          = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
+  vect4d_t next_state     = {0};     //Next State
+  vect4d_t state_est      = {0};      //State Estimate
+  vect4d_t next_state_est = {0}; // d/dt (State Estimate)
 
   double* Kc = set_controller_gain(K3); //Control Gain Vector
   double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
 
   double u = 0; //Input force 
-  double err[4] = {0,0,0,0};
-  double rmse[4] = {0,0,0,0};
-
-  //Process Noise
-  double process_noise = 0;
-
-  //Measurement Noise
-  double sensor_noise = 0;
+  double err[4]  = {0};
+  double rmse[4] = {0};
   
   //Initial Setpoints for each state
-  vect4d_t setpoint = {0,0,0,0};
-
-  double impulse = 0;
+  vect4d_t setpoint = {0};
 
   while(time < SIM_TIME){
 
     //gaussian_generator(mean, variance)
-    process_noise = gaussian_generator(PROCESS_NOISE_MEAN, PROCESS_NOISE_COVAR);
-    sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
+    double process_noise = gaussian_generator(PROCESS_NOISE_MEAN, PROCESS_NOISE_COVAR);
+    double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if((time > 1) && (time <= 5)) setpoint.state.x = 0.25;
+    if((time > 1) && (time <= 5)) setpoint.state.x = 1;
     if((time > 5) && (time <= 10)) setpoint.state.x = 0;
     //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
 
+    //measure cart position
+    double y = state.state.x + sensor_noise;
 
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
     state = next_state;
-
-    //measure Position
-    y = state.state.x + sensor_noise;
 
     //full-state estimation
     next_state_est = (vect4d_t){0,0,0,0};
@@ -92,7 +81,7 @@ int main(){
     time += dt;
   }
 
-  char states[4] = {'x', 'v', 'a', 'o'};
+  char states[4] = {'1', '2', '3', '4'};
   for(size_t i=0; i < 4; ++i){
     double val = sqrt(rmse[i]/step);
     printf("RMS %c Error:\t%lf\n", states[i], val);
