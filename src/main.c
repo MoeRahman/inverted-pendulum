@@ -67,7 +67,6 @@ int main(){
     u = process_noise;
     for(size_t i = 0; i < 4; ++i){
       err[i] = state.arr[i] - state_est.arr[i];
-      rmse[i] += err[i]*err[i];
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
 
