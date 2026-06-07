@@ -526,3 +526,11 @@ $$
 ### June 2, 2026
 Finally finished integrating the full-state estimator and optimal feedback control together to get a Linear Guassian Regulator Controller working for an inverted pendulum.
 
+### June 6, 2026
+Next steps:
+- Discrete LQR
+- Discrete Kalman Filter
+- Energy Swing-Up
+- EKF
+- UKF
+- MPC 

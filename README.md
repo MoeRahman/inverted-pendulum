@@ -34,7 +34,7 @@ Example Output:
 
 ## Tentitive Plan:
 
-__Phase I - Single Pendulum Simulation:__ *Equations of motion · Euler/RK4 integrator · Visualization · PID angle then cascaded cart+angle · Add friction · Encoder quantization · Motor deadband · Kalman / EKF noise estimation · LQR · Pole placement · Full state feedback · Lyapunov stability · swing-up energy method*
+__Phase I - Single Pendulum Simulation:__ *~~Equations of motion~~ · ~~Euler/RK4 integrator~~ · ~~Visualization~~ · PID angle then cascaded cart+angle · ~~Add friction~~ · Encoder quantization · Motor deadband · ~~Kalman~~ · EKF state estimation · ~~LQR~~ · ~~Pole placement~~ · ~~Full state feedback~~ · Lyapunov stability · Swing-up energy method*
 
 __Phase II - STM32 Model Build:__ *Encoder + IMU sensing · Motor driver · Real-time loop · Port PID from sim*
 
