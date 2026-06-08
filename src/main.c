@@ -47,8 +47,8 @@ int main(){
     double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if((time > 1) && (time <= 5)) setpoint.state.x = 1;
-    if((time > 5) && (time <= 10)) setpoint.state.x = 0;
+    //if((time > 1)) setpoint.state.x = 1;
+    //if((time > 5) && (time <= 10)) setpoint.state.x = 0;
     //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
 
     //measure cart position
@@ -68,6 +68,7 @@ int main(){
     for(size_t i = 0; i < 4; ++i){
       err[i] = state.arr[i] - state_est.arr[i];
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
+
     }
 
     fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
