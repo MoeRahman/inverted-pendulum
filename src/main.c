@@ -36,8 +36,9 @@ int main(void){
   }
 
   //Time elapsed variable and time step
-  double time = 0;  //Units [sec]
-  const double dt = 0.0001; //Units [sec]
+  double time          = 0;  //Units [sec]
+  const double dt      = 0.0025; //Units [sec]
+  const int time_steps = (int)(SIM_TIME/dt);
 
   //Write column titles
   vect4d_t state          = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
@@ -49,7 +50,10 @@ int main(void){
   double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
 
   double u = 0; //Input force 
+
+  //Estimation Error
   double err[4]  = {0};
+  double rmse[4] = {0};
   
   //Initial Setpoints for each state
   vect4d_t setpoint = {0};
@@ -61,7 +65,7 @@ int main(void){
     double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    //if((time > 1)) setpoint.state.x = 1;
+    if((time > 1)) setpoint.state.x = 1;
     //if((time > 5) && (time <= 10)) setpoint.state.x = 0;
     //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
 
@@ -80,7 +84,11 @@ int main(void){
 
     u = process_noise;
     for(size_t i = 0; i < 4; ++i){
+
+      //Estimation Error
       err[i] = state.arr[i] - state_est.arr[i];
+      rmse[i] += pow(err[i], 2.0);
+
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
     
@@ -91,14 +99,22 @@ int main(void){
     time += dt;
   }
 
+  const char* lables[] = {"pos\t","vel\t","angle\t","ang_vel\t"};
+  printf("\n======ERROR=====\n");
+
+  for(size_t i = 0; i < 4; ++i){
+    rmse[i] = sqrt(rmse[i])/time_steps;
+    printf("%s%.6lf\n",lables[i], rmse[i]);
+  }
+
   fclose(fpt);
-  printf("==SIM COMPLETE!==\n");
+  printf("\n==SIM COMPLETE==\n");
 
   return 0;
 }
 
 void update_log(data_packet_t* file, double time, vect4d_t state, double* err, 
-  vect4d_t state_estimate, double input, double setpoint, double measurement){
+ vect4d_t state_estimate, double input, double setpoint, double measurement){
 
     //simulation time
     file->time = time;
