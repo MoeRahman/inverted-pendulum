@@ -4,6 +4,19 @@
 #include "physics.h"
 
 #define SIM_TIME 10
+#define LOG_SIZE 16
+
+typedef struct{
+  double time;
+  double position, velocity, angle, angular_velocity;
+  double input, setpoint;
+  double position_error, velocity_error, angle_error, angular_velocity_error;
+  double position_estimate, velocity_estimate, angle_estimate, angular_velocity_estimate;
+  double position_measurement; 
+}data_packet_t;
+
+//Log file initialize
+data_packet_t log_file = {0};
 
 int main(){
 
@@ -11,15 +24,13 @@ int main(){
   srand(time(NULL));
 
   //Create CSV File
-  FILE *fpt = fopen("pendulum_sim.csv", "w");
+  FILE *fpt = fopen("sim_file.bin", "wb");
 
   //Check if file opened successfully
   if (fpt == NULL) {
       fprintf(stderr, "Error opening file!\n");
       return 1;
   }
-
-  fprintf(fpt, "time,x,vel,angle,input,setpoint,pos_err,x_est,vel_est,angle_est,x_meas,ang_vel,ang_vel_est,vel_err,theta_err,ang_vel_err\n");
 
   //Time elapsed variable and time step
   double time = 0;  //Units [sec]
@@ -68,13 +79,35 @@ int main(){
     for(size_t i = 0; i < 4; ++i){
       err[i] = state.arr[i] - state_est.arr[i];
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
-
     }
 
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf,", time, state.state.x, state.state.x_dot, state.state.theta, u); 
-    fprintf(fpt, "%lf,%lf,", setpoint.state.x, err[0]);
-    fprintf(fpt, "%lf,%lf,%lf,%lf,", state_est.state.x, state_est.state.x_dot, state_est.state.theta, y);
-    fprintf(fpt, "%lf,%lf,%lf,%lf,%lf\n", state.state.theta_dot, state_est.state.theta_dot, err[1], err[2], err[3]);
+    //simulation time
+    log_file.time = time;
+
+    //state vector
+    log_file.position         = state.state.x;
+    log_file.velocity         = state.state.x_dot;
+    log_file.angle            = state.state.theta;
+    log_file.angular_velocity = state.state.theta_dot;
+
+    //state error
+    log_file.position_error         = err[0];
+    log_file.velocity_error         = err[1];
+    log_file.angle_error            = err[2]; 
+    log_file.angular_velocity_error = err[3];
+
+    //state estimates
+    log_file.position_estimate         = state_est.state.x;
+    log_file.velocity_estimate         = state_est.state.x_dot;
+    log_file.angle_estimate            = state_est.state.theta;
+    log_file.angular_velocity_estimate = state_est.state.theta_dot;
+
+    //log control variables
+    log_file.input = u;
+    log_file.setpoint = setpoint.state.x;
+    log_file.position_measurement = y;
+
+    fwrite(&log_file, sizeof(double), LOG_SIZE, fpt);
 
     time += dt;
   }
