@@ -26,7 +26,7 @@ int main(void){
   //Generate seed for Guassian noise generation
   srand(time(NULL));
 
-  //Create CSV File
+  //Create Binary File
   FILE *fpt = fopen("sim_file.bin", "wb");
 
   //Check if file opened successfully
