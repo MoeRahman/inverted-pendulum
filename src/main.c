@@ -18,7 +18,10 @@ typedef struct{
 //Log file initialize
 data_packet_t log_file = {0};
 
-int main(){
+void update_log(data_packet_t* file, double time, vect4d_t state, double* err, 
+  vect4d_t state_estimate, double input, double setpoint, double measurement);
+
+int main(void){
 
   //Generate seed for Guassian noise generation
   srand(time(NULL));
@@ -80,32 +83,8 @@ int main(){
       err[i] = state.arr[i] - state_est.arr[i];
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
-
-    //simulation time
-    log_file.time = time;
-
-    //state vector
-    log_file.position         = state.state.x;
-    log_file.velocity         = state.state.x_dot;
-    log_file.angle            = state.state.theta;
-    log_file.angular_velocity = state.state.theta_dot;
-
-    //state error
-    log_file.position_error         = err[0];
-    log_file.velocity_error         = err[1];
-    log_file.angle_error            = err[2]; 
-    log_file.angular_velocity_error = err[3];
-
-    //state estimates
-    log_file.position_estimate         = state_est.state.x;
-    log_file.velocity_estimate         = state_est.state.x_dot;
-    log_file.angle_estimate            = state_est.state.theta;
-    log_file.angular_velocity_estimate = state_est.state.theta_dot;
-
-    //log control variables
-    log_file.input = u;
-    log_file.setpoint = setpoint.state.x;
-    log_file.position_measurement = y;
+    
+    update_log(&log_file, time, state, err, state_est, u, setpoint.arr[0], y);
 
     fwrite(&log_file, sizeof(double), LOG_SIZE, fpt);
 
@@ -113,8 +92,39 @@ int main(){
   }
 
   fclose(fpt);
-  printf(".csv file created successfully.\n");
+  printf("==SIM COMPLETE!==\n");
 
   return 0;
 }
+
+void update_log(data_packet_t* file, double time, vect4d_t state, double* err, 
+  vect4d_t state_estimate, double input, double setpoint, double measurement){
+
+    //simulation time
+    file->time = time;
+
+    //state vector
+    file->position         = state.state.x;
+    file->velocity         = state.state.x_dot;
+    file->angle            = state.state.theta;
+    file->angular_velocity = state.state.theta_dot;
+
+    //state error
+    file->position_error         = err[0];
+    file->velocity_error         = err[1];
+    file->angle_error            = err[2]; 
+    file->angular_velocity_error = err[3];
+
+    //state estimates
+    file->position_estimate         = state_estimate.state.x;
+    file->velocity_estimate         = state_estimate.state.x_dot;
+    file->angle_estimate            = state_estimate.state.theta;
+    file->angular_velocity_estimate = state_estimate.state.theta_dot;
+
+    //log control variables
+    file->input                = input;
+    file->setpoint             = setpoint;
+    file->position_measurement = measurement;
+
+  }
 
