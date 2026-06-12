@@ -37,7 +37,7 @@ int main(void){
 
   //Time elapsed variable and time step
   double time          = 0;  //Units [sec]
-  const double dt      = 0.0025; //Units [sec]
+  const double dt      = 0.00025; //Units [sec]
   const int time_steps = (int)(SIM_TIME/dt);
 
   //Write column titles
@@ -65,9 +65,7 @@ int main(void){
     double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if((time > 1)) setpoint.state.x = 1;
-    //if((time > 5) && (time <= 10)) setpoint.state.x = 0;
-    //setpoint.state.x = 0.5*sin(2*M_PI*time/5);
+    if(time > 1) setpoint.state.x = 0.25;
 
     //measure cart position
     double y = state.state.x + sensor_noise;
@@ -92,15 +90,15 @@ int main(void){
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
     
+    
     update_log(&log_file, time, state, err, state_est, u, setpoint.arr[0], y);
-
     fwrite(&log_file, sizeof(double), LOG_SIZE, fpt);
 
     time += dt;
   }
 
-  const char* lables[] = {"pos\t","vel\t","angle\t","ang_vel\t"};
-  printf("\n======ERROR=====\n");
+  const char* lables[] = {"pos\t","vel\t","angle\t","omega\t"};
+  printf("\n______ERROR_____\n");
 
   for(size_t i = 0; i < 4; ++i){
     rmse[i] = sqrt(rmse[i])/time_steps;
