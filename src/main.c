@@ -41,10 +41,10 @@ int main(void){
   const int time_steps = (int)(SIM_TIME/dt);
 
   //Write column titles
-  vect4d_t state          = {0,0,-1e-3,0};      //State {m, m/s, rad, rad/s}
-  vect4d_t next_state     = {0};     //Next State
-  vect4d_t state_est      = {0};      //State Estimate
-  vect4d_t next_state_est = {0}; // d/dt (State Estimate)
+  vect4d_t state          = {0,0,-1e-3,0};    //State {m, m/s, rad, rad/s}
+  vect4d_t next_state     = {0};              //Next State
+  vect4d_t state_est      = {0};              //State Estimate
+  vect4d_t next_state_est = {0};              // d/dt (State Estimate)
 
   double* Kc = set_controller_gain(K3); //Control Gain Vector
   double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
@@ -65,7 +65,7 @@ int main(void){
     double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if(time > 1) setpoint.state.x = 0.25;
+    if(time > 1) setpoint.state.x = 1;
 
     //measure cart position
     double y = state.state.x + sensor_noise;
@@ -89,7 +89,6 @@ int main(void){
 
       u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
     }
-    
     
     update_log(&log_file, time, state, err, state_est, u, setpoint.arr[0], y);
     fwrite(&log_file, sizeof(double), LOG_SIZE, fpt);
