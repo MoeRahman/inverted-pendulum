@@ -70,6 +70,15 @@ int main(void){
     //measure cart position
     double y = state.state.x + sensor_noise;
 
+    u = process_noise;
+    for(size_t i = 0; i < 4; ++i){
+      //Estimation Error
+      err[i] = state.arr[i] - state_est.arr[i];
+      rmse[i] += pow(err[i], 2.0);
+      // u = -Kx
+      u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
+    }
+
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
     rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
@@ -79,16 +88,6 @@ int main(void){
     next_state_est = (vect4d_t){0,0,0,0};
     rk4_step(kalman_filter, &state_est, &next_state_est, u, y, Kf, dt);
     state_est = next_state_est;
-
-    u = process_noise;
-    for(size_t i = 0; i < 4; ++i){
-
-      //Estimation Error
-      err[i] = state.arr[i] - state_est.arr[i];
-      rmse[i] += pow(err[i], 2.0);
-
-      u += Kc[i]*(setpoint.arr[i] - state_est.arr[i]);
-    }
     
     update_log(&log_file, time, state, err, state_est, u, setpoint.arr[0], y);
     fwrite(&log_file, sizeof(double), LOG_SIZE, fpt);
