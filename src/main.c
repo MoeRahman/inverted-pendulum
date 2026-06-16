@@ -36,9 +36,11 @@ int main(void){
   }
 
   //Time elapsed variable and time step
-  double time          = 0;  //Units [sec]
-  const double dt      = 0.001; //Units [sec]
-  const int time_steps = (int)(SIM_TIME/dt);
+  double time                = 0;      //Units [sec]
+  const double dt            = 0.0001; //Units [sec] 10kHz
+  const double controller_dt = 0.001;   //Units [sec] 1KHz
+  const size_t time_steps = (size_t)(SIM_TIME/dt);
+  const size_t zoh_steps  = (size_t)(controller_dt/dt);
 
   //Write column titles
   vect4d_t state          = {0,0,-1e-3,0};    //State {m, m/s, rad, rad/s}
@@ -81,8 +83,13 @@ int main(void){
 
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
-    rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
-    state = next_state;
+
+    //ZOH
+    for(size_t j = 0; j < zoh_steps; ++j){
+      rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
+      state = next_state;
+      time += dt;
+    }
 
     //full-state estimation
     next_state_est = (vect4d_t){0,0,0,0};
