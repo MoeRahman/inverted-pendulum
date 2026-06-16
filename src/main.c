@@ -37,7 +37,7 @@ int main(void){
 
   //Time elapsed variable and time step
   double time          = 0;  //Units [sec]
-  const double dt      = 0.00025; //Units [sec]
+  const double dt      = 0.001; //Units [sec]
   const int time_steps = (int)(SIM_TIME/dt);
 
   //Write column titles
@@ -46,7 +46,7 @@ int main(void){
   vect4d_t state_est      = {0};              //State Estimate
   vect4d_t next_state_est = {0};              // d/dt (State Estimate)
 
-  double* Kc = set_controller_gain(K3); //Control Gain Vector
+  double* Kc = set_controller_gain(K2); //Control Gain Vector
   double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
 
   double u = 0; //Input force 
