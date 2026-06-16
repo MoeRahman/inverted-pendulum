@@ -71,8 +71,8 @@ void kalman_filter(vect4d_t* state_estimate,
 double* set_estimator_gain(gain_t gain){
 
   static double GAIN_TABLE[3][4] = {
-    {8.3155, 34.5735, -103.5078, -418.6079}, //theta = 0
-    {6.8046e-01, 2.2651e-01, -1.7617e-03, 5.0846e-05}, //theta = M_PI
+    {8.3155,     34.5735,    -103.5078,   -418.6079},
+    {6.8046e-01, 2.2651e-01, -1.7617e-03, 5.0846e-05},
     {6.8278e-03, 1.8618e-03, 1.2109e-05, 3.4978e-04}
   };
 

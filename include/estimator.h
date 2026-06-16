@@ -25,4 +25,10 @@ void kalman_filter(vect4d_t* state_estimate,
                    double measurement,
                    void* params);
 
+void extended_kalman_filter(vect4d_t* state_estimate,
+                            vect4d_t* d_dt_state_estimate,
+                            double input,
+                            double measurement,
+                            void* params);
+
 double* set_estimator_gain(gain_t gain);
