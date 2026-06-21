@@ -68,7 +68,7 @@ int main(void){
     double sensor_noise = gaussian_generator(POS_SENSOR_MEAN, POS_SENSOR_COVAR);
 
     //step
-    if(time > 1) setpoint.state.x = 1;
+    if(time > 1) setpoint.state.x = 0.5;
     if((time >= 5) & (time < 10)) setpoint.state.x = 0;
 
     //measure cart position

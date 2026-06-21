@@ -5,4 +5,4 @@
 
 double* set_controller_gain(gain_t gain);
 
-void DARE();
+void DRDE();

@@ -10,27 +10,29 @@ double angular_encoder_sensor(double theta_measurement){
     return 0;
 }
 
-void kalman_filter(vect4d_t* state_estimate, 
-                   vect4d_t* d_dt_state_estimate,
-                   double input, 
-                   double measurement,
-                   void* params){
+void kalman_filter(vect4d_t* state_estimate, vect4d_t* d_dt_state_estimate,double input, double measurement,void* params){
+  
+  double* kalman_gain = (double*)params;
 
-    double* kalman_gain = (double*)params;
+  for(size_t i = 0; i < 4; ++i) {
+      d_dt_state_estimate->arr[i] = 0.0;
+  }
 
-    for(size_t i = 0; i < 4; ++i) {
-        d_dt_state_estimate->arr[i] = 0.0;
-    }
+  double obsvr_error = measurement - state_estimate->arr[0];
+  
+  //d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
+  for(size_t i = 0; i < 4; ++i){
+      for(size_t j = 0; j < 4; ++j){
+          d_dt_state_estimate->arr[i] += A[i][j] * state_estimate->arr[j];
+      }
+      d_dt_state_estimate->arr[i] += B[i] * input + kalman_gain[i] * obsvr_error;
+  }
+}
 
-    double obsvr_error = measurement - state_estimate->arr[0];
+void ekf(vect4d_t* state_estimate, vect4d_t* d_dt_state_estimate, double input, double measurement, void* params){
 
-    //d/dt x_est = A*x_est + B*u + Kf*(y - C*x_est)
-    for(size_t i = 0; i < 4; ++i){
-        for(size_t j = 0; j < 4; ++j){
-            d_dt_state_estimate->arr[i] += A[i][j] * state_estimate->arr[j];
-        }
-        d_dt_state_estimate->arr[i] += B[i] * input + kalman_gain[i] * obsvr_error;
-    }
+  //calculate d
+
 }
 
 

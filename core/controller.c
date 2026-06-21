@@ -24,3 +24,7 @@ double *set_controller_gain(gain_t gain){
     return NULL;
   }
 }
+
+void DRDE(){
+  
+}
