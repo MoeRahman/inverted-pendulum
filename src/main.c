@@ -38,7 +38,8 @@ int main(void){
   //Time elapsed variable and time step
   double time                = 0;      //Units [sec]
   const double dt            = 0.0001; //Units [sec] 10kHz
-  const double controller_dt = 0.001;   //Units [sec] 1KHz
+  const double controller_dt = 0.0001;   //Units [sec] 1KHz
+
   const size_t time_steps = (size_t)(SIM_TIME/dt);
   const size_t zoh_steps  = (size_t)(controller_dt/dt);
 
@@ -49,7 +50,7 @@ int main(void){
   vect4d_t next_state_est = {0};              // d/dt (State Estimate)
 
   double* Kc = set_controller_gain(K2); //Control Gain Vector
-  double* Kf = set_estimator_gain(K1);  //Estimator Gain Vector
+  double* Kf = set_estimator_gain(K2);  //Estimator Gain Vector
 
   double u = 0; //Input force 
 
@@ -68,6 +69,7 @@ int main(void){
 
     //step
     if(time > 1) setpoint.state.x = 1;
+    if((time >= 5) & (time < 10)) setpoint.state.x = 0;
 
     //measure cart position
     double y = state.state.x + sensor_noise;
@@ -84,12 +86,8 @@ int main(void){
     //step-forward non-linear dynamics
     next_state = (vect4d_t){0,0,0,0};
 
-    //ZOH
-    for(size_t j = 0; j < zoh_steps; ++j){
-      rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
-      state = next_state;
-      time += dt;
-    }
+    rk4_step(pendulum_dynamics, &state, &next_state, u, y, Kf, dt);
+    state = next_state;
 
     //full-state estimation
     next_state_est = (vect4d_t){0,0,0,0};

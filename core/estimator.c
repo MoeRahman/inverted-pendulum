@@ -37,9 +37,9 @@ void kalman_filter(vect4d_t* state_estimate,
 double* set_estimator_gain(gain_t gain){
 
   static double GAIN_TABLE[3][4] = {
+    {3.5499e-02,  6.4151e-01, -2.0772e+00, -1.1452e+01},
     {8.3155,     34.5735,   -103.5078,  -418.6079},
-    {0.011072,   0.061639,  -0.135092,  -0.744244},
-    {6.8278e-03, 1.8618e-03, 1.2109e-05, 3.4978e-04}
+    {0,0,0,0}
   };
 
   if((gain >= 0) && (gain < 3)){
